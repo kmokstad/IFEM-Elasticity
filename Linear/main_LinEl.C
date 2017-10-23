@@ -195,8 +195,7 @@ int main (int argc, char** argv)
   if (!ignoredPatches.empty())
   {
     IFEM::cout <<"\nIgnored patches:";
-    for (size_t i = 0; i < ignoredPatches.size(); i++)
-      IFEM::cout <<" "<< ignoredPatches[i];
+    for (int ip : ignoredPatches) IFEM::cout <<" "<< ip;
   }
   IFEM::cout << std::endl;
 
@@ -270,9 +269,11 @@ int main (int argc, char** argv)
       prefix[i] = pit->second.c_str();
 
   Matrix eNorm;
-  Vector displ, load;
+  Vector load;
+  Vectors displ(model->haveDualSol() ? 2 : 1);
   Vectors projs(pOpt.size()), gNorm;
   Vectors projx(pOpt.size()), xNorm;
+  Vectors projd(model->haveDualSol() ? pOpt.size() : 0), dNorm;
   std::vector<Mode> modes;
 
   if (aSim && !aSim->initAdaptor(adaptor))
@@ -297,7 +298,8 @@ int main (int argc, char** argv)
     if (staticSol)
     {
       exporter->registerField("u", "solution", DataExporter::SIM, results);
-      exporter->setFieldValue("u", model, aSim ? &aSim->getSolution() : &displ);
+      exporter->setFieldValue("u", model,
+                              aSim ? &aSim->getSolution() : &displ.front());
       for (i = 0, pit = pOpt.begin(); pit != pOpt.end(); i++, ++pit) {
         exporter->registerField(prefix[i], "projected", DataExporter::SIM,
                                 DataExporter::SECONDARY, prefix[i]);
@@ -324,23 +326,28 @@ int main (int argc, char** argv)
     // Static solution: Assemble [Km] and {R}
     model->setMode(SIM::STATIC);
     model->setQuadratureRule(model->opt.nGauss[0],true,true);
-    model->initSystem(model->opt.solver,1,1,0,true);
+    model->initSystem(model->opt.solver,1,model->getNoRHS(),0,true);
     if (!model->assembleSystem())
       return 2;
     else if (vizRHS)
       model->extractLoadVec(load);
 
     // Solve the linear system of equations
-    if (!model->solveSystem(displ,1))
+    if (!model->solveMatrixSystem(displ,1))
       return 3;
 
     // Project the FE stresses onto the splines basis
     model->setMode(SIM::RECOVERY);
     for (i = 0, pit = pOpt.begin(); pit != pOpt.end(); i++, ++pit)
-      if (!model->project(projs[i],displ,pit->first))
+    {
+      if (!model->project(projs[i],displ.front(),pit->first))
         return 4;
-      else if (!model->projectAnaSol(projx[i],pit->first))
+      if (!projd.empty() && displ.size() > 1)
+        if (!model->project(projd[i],displ[1],pit->first))
+          return 4;
+      if (!model->projectAnaSol(projx[i],pit->first))
         projx[i].clear();
+    }
 
     if (!pOpt.empty())
       IFEM::cout << std::endl;
@@ -349,21 +356,25 @@ int main (int argc, char** argv)
     {
       // Evaluate solution norms
       model->setQuadratureRule(model->opt.nGauss[1]);
-      if (!model->solutionNorms(Vectors(1,displ),projs,eNorm,gNorm))
+      if (!model->solutionNorms(Vectors(1,displ.front()),projs,eNorm,gNorm))
         return 4;
+
+      if (!projd.empty() && displ.size() > 1)
+        if (!model->solutionNorms(TimeDomain(),Vectors(1,displ[1]),projd,dNorm))
+          return 4;
 
       if (model->haveAnaSol())
       {
         // Evaluate norms of the projected analytical solution
         Elasticity::asolProject = true;
-        if (!model->solutionNorms(TimeDomain(),Vectors(1,displ),projx,xNorm))
+        if (!model->solutionNorms(TimeDomain(),displ,projx,xNorm))
           return 4;
       }
     }
 
     if (!gNorm.empty())
     {
-      const Vector& norm = gNorm.front();
+      Vector& norm = gNorm.front();
       double Rel = norm.size() > 2 ? 100.0/norm(3) : 0.0;
       if (oneD && !KLp)
       {
@@ -384,6 +395,13 @@ int main (int argc, char** argv)
         if (model->haveAnaSol() && norm.size() >= 6)
           IFEM::cout <<"\nResidual error (r(u) + J(u))^0.5 : "<< norm(5)
                      <<"\n- relative error (% of |u|) : "<< norm(5)*Rel;
+        else if (!model->haveDualSol())
+          norm.insert(norm.begin()+5,0.0);
+        if (norm(5) != 0.0)
+          IFEM::cout <<"\nRecovered section force a(u^h,w)^0.5 : "<< norm(5);
+        if (!dNorm.empty())
+          IFEM::cout <<"\nEnergy norm |z^h| = a(z^h,z^h)^0.5   : "
+                     << dNorm.front()(1);
       }
 
       size_t j = 1;
@@ -407,11 +425,18 @@ int main (int argc, char** argv)
                    <<"\nL2-error (e,e)^0.5, e=s^r-s^h        : "<< gNorm[j](4)
                    <<"\n- relative error (% of |s^r|) : "
                    << gNorm[j](4)/gNorm[j](3)*100.0;
+        if (j < dNorm.size() && !dNorm[j].empty())
+        {
+          const Vector& dn = dNorm[j];
+          IFEM::cout <<"\nEnergy norm |z^r| = a(z^r,z^r)^0.5   : "<< dn(1)
+                     <<"\nError norm a(e,e)^0.5, e=z^r-z^h     : "<< dn(2)
+                     <<"\n- relative error (% of |z^r|) : "<< 100.0*dn(2)/dn(1);
+        }
       }
       IFEM::cout << std::endl;
     }
 
-    model->dumpResults(displ,0.0,IFEM::cout,true,6);
+    model->dumpResults(displ.front(),0.0,IFEM::cout,true,6);
     if (!projs.empty())
       model->dumpVector(projs.front(),nullptr,IFEM::cout,6);
 
@@ -420,7 +445,7 @@ int main (int argc, char** argv)
     // Linearized buckling: Assemble [Km] and [Kg]
     model->setMode(SIM::BUCKLING);
     model->initSystem(model->opt.solver,2,0);
-    if (!model->assembleSystem(Vectors(1,displ)))
+    if (!model->assembleSystem(displ))
       return 5;
 
     // Solve the generalized eigenvalue problem
@@ -497,7 +522,7 @@ int main (int argc, char** argv)
       return 10;
 
     // Write solution fields to VTF-file
-    if (!model->writeGlvS(displ,1,nBlock))
+    if (!model->writeGlvS(displ.front(),1,nBlock))
       return 11;
 
     // Write projected solution fields to VTF-file
@@ -530,19 +555,19 @@ int main (int argc, char** argv)
     osg.precision(18);
     IFEM::cout <<"\nWriting updated g2-file "<< infile << std::endl;
     model->dumpGeometry(osg);
-    if (!displ.empty())
+    if (!displ.empty() && !displ.front().empty())
     {
       // Write solution (control point values) to ASCII files
       std::ofstream osd(strcat(strtok(infile,"."),".dis"));
       osd.precision(18);
       IFEM::cout <<"\nWriting deformation to file "<< infile << std::endl;
       utl::LogStream log(osd);
-      model->dumpPrimSol(displ,log,false);
+      model->dumpPrimSol(displ.front(),log,false);
       std::ofstream oss(strcat(strtok(infile,"."),".sol"));
       oss.precision(18);
       IFEM::cout <<"\nWriting solution to file "<< infile << std::endl;
       utl::LogStream log2(oss);
-      model->dumpSolution(displ,log2);
+      model->dumpSolution(displ.front(),log2);
     }
     if (!modes.empty())
     {

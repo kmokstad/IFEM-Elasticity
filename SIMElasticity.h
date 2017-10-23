@@ -19,6 +19,7 @@
 #include "ElasticityUtils.h"
 #include "MaterialBase.h"
 #include "ForceIntegrator.h"
+#include "DualField.h"
 #include "Property.h"
 #include "TimeStep.h"
 #include "AnaSol.h"
@@ -54,8 +55,8 @@ public:
     if (aCode > 0)
       Dim::myVectors.erase(aCode);
 
-    for (size_t i = 0; i < mVec.size(); i++)
-      delete mVec[i];
+    for (Material* mat : mVec)
+      delete mat;
   }
 
   //! \brief Returns the name of this simulator (for use in the HDF5 export).
@@ -88,8 +89,8 @@ public:
       elp->setTraction((TractionFunc*)nullptr);
     }
 
-    for (size_t i = 0; i < mVec.size(); i++)
-      delete mVec[i];
+    for (Material* mat : mVec)
+      delete mat;
     mVec.clear();
 
     this->Dim::clearProperties();
@@ -151,34 +152,33 @@ protected:
     if (!Dim::mySol) return;
 
     // Define analytical boundary condition fields
-    PropertyVec::iterator p;
-    for (p = Dim::myProps.begin(); p != Dim::myProps.end(); ++p)
-      if (p->pcode == Property::DIRICHLET_ANASOL)
+    for (Property& p : Dim::myProps)
+      if (p.pcode == Property::DIRICHLET_ANASOL)
       {
         VecFunc* vecField = Dim::mySol->getVectorSol();
         if (!vecField)
-          p->pcode = Property::UNDEFINED;
-        else if (aCode == abs(p->pindx))
-          p->pcode = Property::DIRICHLET_INHOM;
+          p.pcode = Property::UNDEFINED;
+        else if (aCode == abs(p.pindx))
+          p.pcode = Property::DIRICHLET_INHOM;
         else if (aCode == 0)
         {
-          aCode = abs(p->pindx);
+          aCode = abs(p.pindx);
           Dim::myVectors[aCode] = vecField;
-          p->pcode = Property::DIRICHLET_INHOM;
+          p.pcode = Property::DIRICHLET_INHOM;
         }
         else
-          p->pcode = Property::UNDEFINED;
+          p.pcode = Property::UNDEFINED;
       }
-      else if (p->pcode == Property::NEUMANN_ANASOL)
+      else if (p.pcode == Property::NEUMANN_ANASOL)
       {
         STensorFunc* stressField = Dim::mySol->getStressSol();
         if (stressField)
         {
-          p->pcode = Property::NEUMANN;
-          Dim::myTracs[p->pindx] = new TractionField(*stressField);
+          p.pcode = Property::NEUMANN;
+          Dim::myTracs[p.pindx] = new TractionField(*stressField);
         }
         else
-          p->pcode = Property::UNDEFINED;
+          p.pcode = Property::UNDEFINED;
       }
   }
 
@@ -230,10 +230,7 @@ protected:
         IFEM::cout <<"\tMaterial code "<< code <<": ";
         if (code > 0)
           this->setPropertyType(code,Property::MATERIAL,mVec.size());
-        if (Dim::dimension == 2)
-          mVec.push_back(elInt->parseMatProp((char*)nullptr,planeStrain));
-        else
-          mVec.push_back(elInt->parseMatProp((char*)nullptr));
+        mVec.push_back(elInt->parseMatProp((char*)nullptr,planeStrain));
         IFEM::cout << std::endl;
       }
     }
@@ -324,10 +321,7 @@ protected:
       for (int i = 0; i < nmat && (cline = utl::readLine(is)); i++)
       {
         IFEM::cout <<"\tMaterial data: ";
-        if (Dim::dimension == 2)
-          mVec.push_back(elInt->parseMatProp(cline,planeStrain));
-        else
-          mVec.push_back(elInt->parseMatProp(cline));
+        mVec.push_back(elInt->parseMatProp(cline,planeStrain));
 
         while ((cline = strtok(nullptr," ")))
           if (!strncasecmp(cline,"ALL",3))
@@ -401,10 +395,7 @@ protected:
         IFEM::cout <<"  Parsing <"<< child->Value() <<">"<< std::endl;
         int code = this->parseMaterialSet(child,mVec.size());
         IFEM::cout <<"\tMaterial code "<< code <<":";
-        if (Dim::dimension == 2)
-          mVec.push_back(this->getIntegrand()->parseMatProp(child,planeStrain));
-        else
-          mVec.push_back(this->getIntegrand()->parseMatProp(child));
+        mVec.push_back(this->getIntegrand()->parseMatProp(child,planeStrain));
       }
       else if (!strcasecmp(child->Value(),"bodyforce"))
       {
@@ -437,7 +428,27 @@ protected:
         IFEM::cout <<"code "<< bCode << std::endl;
         this->setPropertyType(bCode,Property::OTHER);
       }
-
+      else if (!strcasecmp(child->Value(),"dualfield"))
+      {
+        IFEM::cout <<"  Parsing <"<< child->Value() <<">"<< std::endl;
+        int comp = 1;
+        double depth = 1.0, width = 1.0;
+        Vec3 X0, normal(1.0,0.0,0.0);
+        utl::getAttribute(child,"comp",comp);
+        utl::getAttribute(child,"X0",X0);
+        utl::getAttribute(child,"normal",normal);
+        utl::getAttribute(child,"depth",depth);
+        utl::getAttribute(child,"width",width);
+        if (Dim::dimension == 2)
+          Dim::dualField = new DualVecFunc(comp,X0,normal,depth,width);
+        else
+        {
+          Vec3 XZp(0.0,0.0,1.0);
+          utl::getAttribute(child,"XZp",XZp);
+          Dim::dualField = new DualVecFunc(comp,X0,normal,XZp,depth,width);
+        }
+        this->getIntegrand()->setNoSolutions(2,true);
+      }
       else if (!this->getIntegrand()->parse(child))
         result &= this->Dim::parse(child);
 

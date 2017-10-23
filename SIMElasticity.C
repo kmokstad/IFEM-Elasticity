@@ -23,7 +23,7 @@ template<> bool SIMElasticity<SIM2D>::axiSymmetry = false;
 template<> bool SIMElasticity<SIM2D>::GIpointsVTF = false;
 
 //! Dummy option for 3D problems.
-template<> bool SIMElasticity<SIM3D>::planeStrain = false;
+template<> bool SIMElasticity<SIM3D>::planeStrain = true;
 //! Dummy option for 3D problems.
 template<> bool SIMElasticity<SIM3D>::axiSymmetry = false;
 //! Option for output of Gauss points to VTF for 3D problems.

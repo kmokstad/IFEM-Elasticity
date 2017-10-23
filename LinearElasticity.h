@@ -80,6 +80,8 @@ public:
   const RealFunc* getInitialTemperature() const { return myTemp0; }
   //! \brief Returns the stationary temperature field.
   const RealFunc* getTemperature() const { return myTemp; }
+  //! \brief Returns the extraction function field, if any.
+  virtual Vector* getExtractionField();
 
 protected:
   //! \brief Evaluates the thermal strain at current integration point.

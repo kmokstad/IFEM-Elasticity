@@ -135,6 +135,14 @@ public:
   //! \param[in] X Cartesian coordinates of current point
   virtual bool evalSol(Vector& s, const STensorFunc& asol, const Vec3& X) const;
 
+  //! \brief Evaluates the finite element (FE) strain at an integration point.
+  //! \param[out] s The FE strans values at current point
+  //! \param[in] eV Element displacement vector
+  //! \param[in] fe Finite element data at current point
+  //! \param[in] X Cartesian coordinates of current point
+  bool evalEps(Vector& s, const Vector& eV, const FiniteElement& fe,
+               const Vec3& X) const;
+
   //! \brief Evaluates the primary solution at a result point.
   //! \param[in] eV Element solution vector
   //! \param[in] N Basis function values at current point

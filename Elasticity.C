@@ -144,7 +144,7 @@ LocalIntegral* Elasticity::getLocalIntegral (size_t nen, size_t,
     case SIM::MASS_ONLY:
       result->rhsOnly = neumann;
       result->withLHS = !neumann;
-      result->resize(neumann ? 0 : 1, 1);
+      result->resize(neumann ? 0 : 1, neumann || dS == 0 ? 1 : dS);
       break;
 
     case SIM::DYNAMIC:
@@ -486,9 +486,9 @@ bool Elasticity::kinematics (const Vector& eV,
 void Elasticity::formKG (Matrix& EM, const Vector& N, const Matrix& dNdX,
 			 double r, const Tensor& sigma, double detJW) const
 {
-#if SP_DEBUG > 3
-  std::cout <<"Elasticity::sigma =\n"<< sigma;
-  std::cout <<"Elasticity::kg =";
+#if INT_DEBUG > 3
+  std::cout <<"Elasticity::sigma =\n"<< sigma
+            <<"Elasticity::kg =";
 #endif
 
   unsigned short int i, j;
@@ -500,7 +500,7 @@ void Elasticity::formKG (Matrix& EM, const Vector& N, const Matrix& dNdX,
       for (i = 1; i <= nsd; i++)
 	for (j = 1; j <= nsd; j++)
 	  kg += dNdX(a,i)*sigma(i,j)*dNdX(b,j);
-#if SP_DEBUG > 3
+#if INT_DEBUG > 3
       std::cout << (b == 1 ? '\n' : ' ') << kg;
 #endif
 
@@ -510,7 +510,7 @@ void Elasticity::formKG (Matrix& EM, const Vector& N, const Matrix& dNdX,
       if (kgrr > 0.0)
 	EM(nsd*(a-1)+1,nsd*(b-1)+1) += N(a)*kgrr*N(b)*detJW;
     }
-#if SP_DEBUG > 3
+#if INT_DEBUG > 3
   std::cout << std::endl;
 #endif
 }
@@ -606,15 +606,16 @@ bool Elasticity::evalSol (Vector& s, const FiniteElement& fe, const Vec3& X,
 			  const std::vector<int>& MNPC) const
 {
   // Extract element displacements
-  Vectors eV(1);
+  Vectors eV(nSV);
   int ierr = 0;
-  if (!primsol.empty() && !primsol.front().empty())
-    if ((ierr = utl::gather(MNPC,nsd,primsol.front(),eV.front())))
-    {
-      std::cerr <<" *** Elasticity::evalSol: Detected "<< ierr
-		<<" node numbers out of range."<< std::endl;
-      return false;
-    }
+  for (unsigned short int i = 0; i < nSV && i < primsol.size(); i++)
+    if (!primsol[i].empty())
+      if ((ierr = utl::gather(MNPC,nsd,primsol[i],eV[i])))
+      {
+        std::cerr <<" *** Elasticity::evalSol: Detected "<< ierr
+                  <<" node numbers out of range."<< std::endl;
+        return false;
+      }
 
   return this->evalSol2(s,eV,fe,X);
 }
@@ -641,7 +642,7 @@ bool Elasticity::evalSol2 (Vector& s, const Vectors& eV,
   }
   else if (!this->evalSol(s,eV,fe,X,true,pBuf))
     return false;
-#if SP_DEBUG > 2
+#if INT_DEBUG > 2
   else if (pBuf)
     std::cout <<"Elasticity::evalSol2("<< X <<"): "
 	      <<" Pdir1 = "<< pBuf[0] <<", Pdir2 = "<< pBuf[1] << std::endl;
@@ -754,6 +755,28 @@ bool Elasticity::evalSol (Vector& s, const STensorFunc& asol,
 }
 
 
+bool Elasticity::evalEps (Vector& s, const Vector& eV, const FiniteElement& fe,
+                          const Vec3& X) const
+{
+  if (eV.size() != fe.dNdX.rows()*nsd)
+  {
+    std::cerr <<" *** Elasticity::evalEps: Invalid displacement vector."
+	      <<"\n     size(eV) = "<< eV.size() <<"   size(dNdX) = "
+	      << fe.dNdX.rows() <<","<< fe.dNdX.cols() << std::endl;
+    return false;
+  }
+
+  // Evaluate the strain tensor
+  Matrix Bmat;
+  SymmTensor eps(nsd,axiSymmetry);
+  if (!this->kinematics(eV,fe.N,fe.dNdX,X.x,Bmat,eps,eps))
+    return false;
+
+  s = eps;
+  return true;
+}
+
+
 bool Elasticity::getPrincipalDir (Matrix& pdir, size_t nPt, size_t idx) const
 {
   if (!pDirBuf || idx < 1 || idx > 2) return false;
@@ -790,7 +813,7 @@ size_t Elasticity::getNoFields (int fld) const
       nf += nsd; // Include principal stress components
   }
 
-#ifdef SP_DEBUG
+#ifdef INT_DEBUG
   std::cout <<"Elasticity::getNoFields: "<< nf << std::endl;
 #endif
   return nf;
@@ -918,9 +941,14 @@ bool ElasticityNorm::evalInt (LocalIntegral& elmInt, const FiniteElement& fe,
     return false;
 
   // Evaluate the finite element stress field
-  Vector sigmah, sigma, error;
+  Vector sigmah, sigma, epsz, error;
   if (!problem.evalSol(sigmah,pnorm.vec,fe,X))
     return false;
+
+  // Evaluate the dual strain field
+  if (problem.getExtractionField() && pnorm.vec.size() > 1)
+    if (!problem.evalEps(epsz,pnorm.vec[1],fe,X))
+      return false;
 
   bool planeStrain = sigmah.size() == 4 && Cinv.rows() == 3;
   if (planeStrain) sigmah.erase(sigmah.begin()+2); // Remove the sigma_zz
@@ -957,6 +985,11 @@ bool ElasticityNorm::evalInt (LocalIntegral& elmInt, const FiniteElement& fe,
     error = sigma - sigmah;
     pnorm[ip++] += error.dot(Cinv*error)*detJW;
   }
+
+  // Evaluate the variational-consistent postprocessing quantity
+  // (typically a sectional force component)
+  if (problem.getExtractionField())
+    pnorm[ip++] = sigma.dot(epsz)*detJW;
 
   // Integrate the volume
   pnorm[ip++] += detJW;
@@ -1029,8 +1062,8 @@ bool ElasticityNorm::finalizeElement (LocalIntegral& elmInt)
 
   // Evaluate local effectivity indices as sqrt(a(e^r,e^r)/a(e,e))
   // with e^r = u^r - u^h  and  e = u - u^h
-  for (size_t ip = 10; ip < pnorm.size(); ip += 6)
-    pnorm[ip] = sqrt(pnorm[ip-4] / pnorm[3]);
+  for (size_t ip = this->getNoFields(1); ip+5 < pnorm.size(); ip += 6)
+    pnorm[ip+5] = sqrt(pnorm[ip+1] / pnorm[3]);
 
   return true;
 }
@@ -1041,7 +1074,11 @@ size_t ElasticityNorm::getNoFields (int group) const
   if (group == 0)
     return this->NormBase::getNoFields();
   else if (group == 1 || group == -1)
-    return anasol ? 5 : 3;
+  {
+    size_t nfld = anasol ? 5 : 3;
+    if (static_cast<Elasticity&>(myProblem).getExtractionField()) nfld++;
+    return nfld;
+  }
   else if (group > 0 || !prjsol[-group-2].empty())
     return anasol ? 6 : 4;
   else
@@ -1052,14 +1089,15 @@ size_t ElasticityNorm::getNoFields (int group) const
 std::string ElasticityNorm::getName (size_t i, size_t j,
                                      const char* prefix) const
 {
-  if (i == 0 || j == 0 || j > 6 || (i == 1 && j > 5))
+  if (i == 0 || j == 0 || j > 6)
     return this->NormBase::getName(i,j,prefix);
 
-  static const char* u[5] = {
+  static const char* u[6] = {
     "a(u^h,u^h)^0.5",
     "((f,u^h)+(t,u^h))^0.5",
     "a(u,u)^0.5",
     "a(e,e)^0.5, e=u-u^h",
+    "a(u^h,w)^0.5",
     "volume"
   };
 
@@ -1073,8 +1111,13 @@ std::string ElasticityNorm::getName (size_t i, size_t j,
   };
 
   const char** s = i > 1 ? p : u;
-  if (!anasol && i == 1 && j == 3) j = 5;
-
+  if (i == 1)
+  {
+    if (!anasol)
+      if (j > 2) j += 2;
+    if (!static_cast<Elasticity&>(myProblem).getExtractionField())
+      if (j > 4 && j < 6) j++;
+  }
   if (!prefix)
     return s[j-1];
 
