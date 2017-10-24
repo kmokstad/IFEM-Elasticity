@@ -500,6 +500,33 @@ protected:
   }
 
 public:
+  //! \brief Solves the assembled linear system of equations for a given load.
+  //! \param[out] solution Global primary solution vector
+  //! \param[in] printSol Print solution if its size is less than \a printSol
+  //! \param[out] rCond Reciprocal condition number
+  //! \param[in] compName Solution name to be used in norm output
+  //! \param[in] newLHS If \e false, reuse the LHS-matrix from previous call.
+  //! \param[in] idxRHS Index to the right-hand-side vector to solve for
+  virtual bool solveSystem(Vector& solution, int printSol, double* rCond,
+                           const char* compName, bool newLHS, size_t idxRHS)
+  {
+    if (!this->Dim::solveSystem(solution,printSol,rCond,compName,newLHS,idxRHS))
+      return false;
+    else if (idxRHS > 0 && printSol != 1)
+      return true;
+
+    // Print out the reaction forces
+    Vector Rforce;
+    if (this->getBoundaryReactions(Rforce))
+    {
+      IFEM::cout <<"Reaction force     :";
+      for (double f : Rforce) IFEM::cout <<" "<< f;
+      IFEM::cout << std::endl;
+    }
+
+    return true;
+  }
+
   //! \brief Prints a norm group to the log stream.
   //! \param[in] gNorm The norm values to print
   //! \param[in] rNorm Reference norms for the first norm group
