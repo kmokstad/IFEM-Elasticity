@@ -124,6 +124,21 @@ void Elasticity::printLog () const
 }
 
 
+void Elasticity::setMaterial (Material* mat)
+{
+  if (mat == material) return;
+
+#ifdef INT_DEBUG
+  if (mat && material)
+  {
+    IFEM::cout <<"\nElasticity::setMaterial: Switching material properties:\n";
+    mat->printLog();
+  }
+#endif
+  material = mat;
+}
+
+
 LocalIntegral* Elasticity::getLocalIntegral (size_t nen, size_t,
 					     bool neumann) const
 {
