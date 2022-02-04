@@ -160,6 +160,8 @@ public:
 
   //! \brief Evaluates the boundary traction field (if any) at specified point.
   Vec3 getTraction(const Vec3& X, const Vec3& n) const;
+  //! \brief Evaluates the boundary traction gradient at specified point.
+  Vec3 getTractionGradient(const Vec3& X, const Vec3& n) const;
   //! \brief Evaluates the body force field (if any) at specified point.
   virtual Vec3 getBodyforce(const Vec3& X) const;
   //! \brief Returns whether an external load is defined.

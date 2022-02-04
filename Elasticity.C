@@ -239,6 +239,17 @@ Vec3 Elasticity::getTraction (const Vec3& X, const Vec3& n) const
 }
 
 
+Vec3 Elasticity::getTractionGradient (const Vec3& X, const Vec3& n) const
+{
+  if (fluxFld)
+    return fluxFld->deriv(X,4);
+  else if (tracFld)
+    return tracFld->deriv(X,n);
+  else
+    return Vec3();
+}
+
+
 Vec3 Elasticity::getBodyforce (const Vec3& X) const
 {
   Vec3 f(gravity);
