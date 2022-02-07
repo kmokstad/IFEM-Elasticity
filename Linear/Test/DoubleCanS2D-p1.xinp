@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!-- 2D Double-cantilever beam with a shear displacement. !-->
+
+<simulation>
+
+  <geometry dim="2" Lx="2.0" Ly="0.4">
+    <refine patch="1" u="19" v="3"/>
+    <topologysets>
+      <set name="fixed" type="edge">
+        <item patch="1">1</item>
+      </set>
+      <set name="loaded" type="edge">
+        <item patch="1">2</item>
+      </set>
+    </topologysets>
+  </geometry>
+
+  <boundaryconditions>
+    <dirichlet set="fixed" component="12"/>
+    <dirichlet set="loaded" component="1"/>
+    <dirichlet set="loaded" component="2">0.001</dirichlet>
+  </boundaryconditions>
+
+  <elasticity>
+    <isotropic E="2.068e11" nu="0.29"/>
+    <dualfield X0="1.6" depth="0.4" dmin="0.0125" skip="2" comp="3" weight="1.0"/>
+    <boundaryforce set="fixed"/>
+  </elasticity>
+
+  <discretization>
+    <nGauss>2 3</nGauss>
+  </discretization>
+
+  <adaptive>
+    <beta type="symmetrized">2.0</beta>
+    <errtol>0.1</errtol>
+    <maxstep>10</maxstep>
+    <scheme>isotropic_function</scheme>
+    <use_norm>1</use_norm>
+  </adaptive>
+
+  <postprocessing>
+    <vtfformat>BINARY</vtfformat>
+    <projection type="CGL2"/>
+  </postprocessing>
+
+</simulation>

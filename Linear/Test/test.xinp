@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<simulation>
+
+  <geometry dim="2" Lx="10" Ly="1">
+    <raiseorder patch="1" u="0" v="1"/>
+    <refine     patch="1" u="159" v="15"/>
+    <topologysets>
+      <set name="fixed" type="edge"><item patch="1">1</item></set>
+      <set name="right" type="edge"><item patch="1">2</item></set>
+    </topologysets>
+  </geometry>
+
+  <boundaryconditions>
+    <dirichlet set="fixed" comp="12"/>
+    <neumann set="right" direction="2">2.5</neumann>
+  </boundaryconditions>
+
+  <postprocessing>
+    <dump_lhs_matrix format="m" eps=0.0>snapshot.mx</dump_lhs_matrix>
+    <dump_rhs_vector format="m" eps=0.0>snapshot.rhs</dump_rhs_vector>
+    <dump_sol_vector format="m" eps=0.0>snapshot.sol</dump_sol_vector>
+  </postprocessing>
+
+  <elasticity>
+    <isotropic E="150000.0" nu="0.25"/>
+  </elasticity>
+
+</simulation>

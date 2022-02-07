@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!-- 3D Cantilever beam with an uniform transverse load. !-->
+
+<simulation>
+
+  <geometry dim="3" Lx="1500.0" Ly="100" Lz="200">
+    <refine patch="1" u="4" v="0" w="1"/>
+    <topologysets>
+      <set name="fixed" type="face">
+        <item patch="1">1</item>
+      </set>
+      <set name="loaded" type="face">
+        <item patch="1">6</item>
+      </set>
+    </topologysets>
+  </geometry>
+
+  <boundaryconditions>
+    <dirichlet set="fixed" component="123"/>
+    <neumann set="loaded" direction="3">-1.0</neumann>
+  </boundaryconditions>
+
+  <elasticity>
+    <isotropic E="210000" nu="0.3"/>
+    <boundaryforce set="fixed"/>
+  </elasticity>
+
+  <discretization>
+    <nGauss default="0"/>
+  </discretization>
+
+  <postprocessing>
+    <resultpoints>
+      <point patch="1" u="1.0" v="0.0" w="0.0"/>
+      <point patch="1" u="1.0" v="1.0" w="0.0"/>
+      <point patch="1" u="1.0" v="0.0" w="1.0"/>
+      <point patch="1" u="1.0" v="1.0" w="1.0"/>
+    </resultpoints>
+  </postprocessing>
+
+</simulation>
