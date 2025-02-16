@@ -151,7 +151,8 @@ void ElasticBase::setMode (SIM::SolutionMode mode)
       break;
 
     case SIM::DYNAMIC:
-      primsol.resize(nSV + (intPrm[4] == 1.0 ? 4 : 2));
+      // Allocate {u,v,a} for each nSV + V,A for HHT (when intPrm[4]==1)
+      primsol.resize(nSV*3 + (intPrm[4] == 1.0 ? 2 : 0));
       break;
 
     case SIM::NORMS:
