@@ -169,11 +169,7 @@ void SIMElasticity<Dim>::printStep (int istep, const TimeDomain& time) const
 template<class Dim>
 bool SIMElasticity<Dim>::advanceStep (TimeStep& tp)
 {
-  Elasticity* elp = dynamic_cast<Elasticity*>(Dim::myProblem);
-  if (elp)
-    elp->advanceStep(tp.time.dt,tp.time.dtn);
-
-  return true;
+  return Dim::myProblem->advanceStep(tp.time);
 }
 
 
