@@ -67,7 +67,7 @@ public:
   virtual size_t getNoSolutions(bool allocated = true) const;
 
   //! \brief Advances the %BDF time step scheme one step forward.
-  void advanceStep(double dt, double dtn);
+  virtual bool advanceStep(const TimeDomain& time);
 
   //! \brief Returns whether this integrand has explicit boundary contributions.
   virtual bool hasBoundaryTerms() const { return false; }

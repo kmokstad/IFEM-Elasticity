@@ -221,9 +221,9 @@ size_t ElasticBase::getNoSolutions (bool allocated) const
 }
 
 
-void ElasticBase::advanceStep (double dt, double dtn)
+bool ElasticBase::advanceStep (const TimeDomain& time)
 {
-  if (bdf) bdf->advanceStep(dt,dtn);
+  return bdf ? bdf->advanceStep(time.dt,time.dtn) : true;
 }
 
 
