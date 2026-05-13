@@ -49,8 +49,8 @@
   </nonlinearsolver>
 
   <postprocessing>
+    <projection type="dgl2"/>
     <vtfformat>BINARY</vtfformat>
-    <direct2nd/>
   </postprocessing>
 
 </simulation>
