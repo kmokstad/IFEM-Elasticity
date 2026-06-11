@@ -18,6 +18,7 @@
 #include "Elasticity.h"
 #include "DataExporter.h"
 #include "HDF5Restart.h"
+#include "Utilities.h"
 #include "Profiler.h"
 #include "IFEM.h"
 #include "tinyxml2.h"
@@ -28,7 +29,7 @@ NonlinearDriver::NonlinearDriver (SIMbase& sim, bool linear, bool adaptive)
 {
   aStep = 0;
   save0 = opt.pSolOnly = true;
-  saveE0 = false;
+  saveE0 = updPt = false;
 
   if (adaptive)
   {
@@ -96,6 +97,8 @@ bool NonlinearDriver::parse (const tinyxml2::XMLElement* elem)
          child; child = child->NextSiblingElement())
       if (!strcasecmp(child->Value(),"direct2nd"))
         opt.pSolOnly = false;
+      else if (!strcasecmp(child->Value(),"projection"))
+        utl::getAttribute(child,"updateNewPt",updPt);
       else if (!strcasecmp(child->Value(),"saveNewElms0"))
         saveE0 = true;
       else if (!strcasecmp(child->Value(),"skipInit"))
@@ -322,7 +325,7 @@ int NonlinearDriver::solveProblem (DataExporter* writer, HDF5Restart* restart,
       // Project the secondary results onto the spline basis
       model.setMode(SIM::RECOVERY);
       Matrix projs(proSol.front());
-      if (!model.project(projs,solution.front(),pit->first,params.time))
+      if (!model.project(projs,solution.front(),pit->first,params.time,updPt))
         return 8;
     }
 
