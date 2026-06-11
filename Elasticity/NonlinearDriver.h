@@ -141,6 +141,7 @@ private:
   int      aStep;  //!< Adaptive mesh refinement step
   bool     save0;  //!< If \e true, also save initial configuration
   bool     saveE0; //!< If \e true, save added elements in initial configuration
+  bool     updPt;  //!< If \e true, update new control points when projecting
 
   Vector    myForces;  //!< Interface nodal forces
   RealArray myReacts;  //!< Reaction force container
