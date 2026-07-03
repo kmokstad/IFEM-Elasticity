@@ -290,7 +290,7 @@ Vec3 Elasticity::getBodyforce (const Vec3& X, double age, bool grd) const
     f += rampS*material->getMassDensity(X)*gravity;
 
   if (bodyFld)
-    f = grd ? bodyFld->deriv(X,4) : (*bodyFld)(X);
+    f += grd ? bodyFld->deriv(X,4) : (*bodyFld)(X);
 
   return f;
 }
