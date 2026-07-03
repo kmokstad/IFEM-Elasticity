@@ -182,7 +182,7 @@ bool NonlinearElasticity::evalInt (LocalIntegral& elmInt,
 
   if (eS)
     // Integrate the load vector due to gravitation and other body forces
-    this->formBodyForce(elMat.b[eS-1],elMat.c,fe.N,X,fe.detJxW);
+    this->formBodyForce(elMat.b[eS-1],elMat.c,fe,X);
 
   return true;
 }
