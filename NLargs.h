@@ -15,6 +15,7 @@
 #define _NL_ARGS_H
 
 #include "SIMargsBase.h"
+#include <vector>
 
 
 //! \brief Enum defining various solution drivers.
