@@ -16,6 +16,7 @@
 #include "ElmMats.h"
 #include "TimeDomain.h"
 #include "BDF.h"
+#include "IFEM.h"
 
 
 ElasticBase::ElasticBase ()
@@ -185,13 +186,18 @@ SIM::SolutionMode ElasticBase::getMode (bool simMode) const
 
   This method will also allocate the internal \ref bdf member when a BDF-scheme
   is used for the time integration (signalled by \a i = 5),
-  and set the number of solution stated accordingly.
+  and set the number of solution states accordingly.
 */
 
 void ElasticBase::setIntegrationPrm (unsigned short int i, double prm)
 {
   if (i < sizeof(intPrm)/sizeof(double))
+  {
+    if (i == 3 && prm >= 0.0 && intPrm[i] != prm)
+      IFEM::cout <<"  "<< (prm > 0.0 ? "Dis" : "En")
+                 <<"abling geometric stiffness."<< std::endl;
     intPrm[i] = prm;
+  }
   else if (!bdf)
   {
     // Using a Backward Difference Formula for time discretization
