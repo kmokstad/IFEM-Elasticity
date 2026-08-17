@@ -64,8 +64,8 @@ Elasticity::Elasticity (unsigned short int n, bool ax) : dS(0), axiSymmetry(ax)
 
 Elasticity::~Elasticity ()
 {
-  if (locSys) delete locSys;
-  if (pDirBuf) delete pDirBuf;
+  delete locSys;
+  delete pDirBuf;
 }
 
 
@@ -466,7 +466,7 @@ bool Elasticity::formBmatrix (Matrix& Bmat, const Matrix& dNdX) const
 */
 
 bool Elasticity::formBmatrix (Matrix& Bmat, const Vector& N, const Matrix& dNdX,
-			      const double r) const
+                              double r) const
 {
   const size_t nenod = N.size();
   Bmat.resize(8,nenod,true);
@@ -553,27 +553,30 @@ bool Elasticity::formDefGradient (const Vector& eV, const Vector& N,
 }
 
 
-bool Elasticity::kinematics (const Vector& eV,
-			     const Vector& N, const Matrix& dNdX, double r,
-			     Matrix& B, Tensor&, SymmTensor& eps) const
+bool Elasticity::kinematics (const Vector& eV, size_t,
+                             const Vector& N, const Matrix& dNdX, double r,
+                             Tensor&, Matrix* B, SymmTensor* eps) const
 {
+  Matrix tmpBmat;
+  if (!B) B = &tmpBmat;
+
   // Evaluate the strain-displacement matrix, B
   if (axiSymmetry)
   {
-    if (!this->formBmatrix(B,N,dNdX,r))
+    if (!this->formBmatrix(*B,N,dNdX,r))
       return false;
   }
   else
   {
-    if (!this->formBmatrix(B,dNdX))
+    if (!this->formBmatrix(*B,dNdX))
       return false;
   }
 
-  if (eV.empty() || eps.dim() == 0)
+  if (eV.empty() || !eps || eps->dim() == 0)
     return true;
 
   // Evaluate the strains
-  return B.multiply(eV,eps); // eps = B*eV
+  return B->multiply(eV,*eps); // eps = B*eV
 }
 
 
@@ -787,10 +790,9 @@ bool Elasticity::evalSol (Vector& s, const Vectors& eV, const FiniteElement& fe,
   }
 
   // Evaluate the deformation gradient, dUdX, and/or the strain tensor, eps
-  Matrix Bmat;
   Tensor dUdX(nDF);
   SymmTensor eps(nsd,axiSymmetry);
-  if (!this->kinematics(eV.front(),fe.N,fe.dNdX,X.x,Bmat,dUdX,eps))
+  if (!this->kinematics(eV.front(),fe.iGP,fe.N,fe.dNdX,X.x,dUdX,nullptr,&eps))
     return false;
 
   // Add strains due to temperature expansion, if any
@@ -879,9 +881,8 @@ bool Elasticity::evalEps (Vector& s, const Vector& eV, const FiniteElement& fe,
   }
 
   // Evaluate the strain tensor
-  Matrix Bmat;
   SymmTensor eps(nsd,axiSymmetry);
-  if (!this->kinematics(eV,fe.N,fe.dNdX,X.x,Bmat,eps,eps))
+  if (!this->kinematics(eV,fe.iGP,fe.N,fe.dNdX,X.x,eps,nullptr,&eps))
     return false;
 
   s = eps;

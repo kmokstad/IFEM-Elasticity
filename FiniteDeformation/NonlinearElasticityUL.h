@@ -22,10 +22,11 @@ class ElmNorm;
 /*!
   \brief Class representing the integrand of the nonlinear elasticity problem.
   \details This class implements an Updated Lagrangian formulation. It inherits
-  most of the Elasticity methods, but reimplements the \a kinematics method
-  for calculating the deformation gradient and the associated Green-Lagrange
-  strain tensor. The \a evalInt and \a evalBou methods are also reimplemented
-  to account for the updated geometry.
+  most of the Elasticity methods, but overrides the Elasticity::kinematics()
+  method for calculating the deformation gradient and
+  the associated Green-Lagrange strain tensor.
+  The Elasticity::evalInt() and Elasticity::evalBou() methods
+  are also overridden to account for the updated geometry.
 */
 
 class NonlinearElasticityUL : public Elasticity
@@ -33,11 +34,9 @@ class NonlinearElasticityUL : public Elasticity
 public:
   //! \brief The constructor invokes the parent class constructor only.
   //! \param[in] n Number of spatial dimensions
-  //! \param[in] axS \e If \e true, and axisymmetric 3D formulation is assumed
+  //! \param[in] axS \e If \e true, an axisymmetric 3D formulation is assumed
   //! \param[in] lop Load option (0=on initial length, 1=on updated length)
   NonlinearElasticityUL(unsigned short int n, bool axS = false, char lop = 0);
-  //! \brief Empty destructor.
-  virtual ~NonlinearElasticityUL() {}
 
   //! \brief Prints out problem definition to the log stream.
   virtual void printLog() const;
@@ -76,10 +75,10 @@ public:
   //! \param[in] X Cartesian coordinates of current integration point
   //! \param[in] normal Boundary normal vector at current integration point
   //!
-  //! \details This method is reimplemented in this class to account for
-  //! possibly with-rotated traction fields (non-conservative loads).
+  //! \details This method is overridden to account for possibly
+  //! with-rotated traction fields (non-conservative loads).
   //! For uni-directional (conservative) loads, it is similar to the
-  //! \a LinearElasticity::evalBou method.
+  //! LinearElasticity::evalBou() method.
   virtual bool evalBou(LocalIntegral& elmInt, const FiniteElement& fe,
                        const Vec3& X, const Vec3& normal) const;
 
@@ -99,9 +98,10 @@ public:
   //! \param[in] r Radial coordinate of current point
   //! \param[out] F Deformation gradient at current point
   //! \param[out] E Green-Lagrange strain tensor at current point
-  virtual bool kinematics(const Vector& eV,
+  virtual bool kinematics(const Vector& eV, size_t,
                           const Vector& N, const Matrix& dNdX, double r,
-                          Matrix&, Tensor& F, SymmTensor& E) const;
+                          Tensor& F, Matrix* = nullptr,
+                          SymmTensor* E = nullptr) const;
 
   //! \brief Returns \e true if simulation diverged on integration point level.
   //! \param[in] iP Global (1-based) index for the integration point to check,
@@ -117,9 +117,9 @@ private:
 
 /*!
   \brief Class representing the integrand of the elasticity energy norm.
-  \details This class reimplements the \a evalInt method to use the strain
-  energy density value returned by the nonlinear constitutive model.
-  It also reimplements the \a evalBou method with a path integral of
+  \details This class overrides the ElasticityNorm::evalInt() method to use
+  the strain energy density value returned by the nonlinear constitutive model.
+  It also overrides the ElasticityNorm::evalBou() method with a path integral of
   the external energy due to boundary tractions.
 */
 
@@ -129,8 +129,6 @@ public:
   //! \brief The only constructor initializes its data members.
   //! \param[in] p The linear elasticity problem to evaluate norms for
   explicit ElasticityNormUL(NonlinearElasticityUL& p) : ElasticityNorm(p) {}
-  //! \brief Empty destructor.
-  virtual ~ElasticityNormUL() {}
 
   //! \brief Initializes the integrand with the number of integration points.
   //! \param[in] nGp Total number of interior integration points
@@ -168,10 +166,10 @@ protected:
   //! \param[in] detF Determinant of deformation gradient
   //! \param[in] detJxW Jacobian determinant times integration point weight
   //!
-  //! \details This method is used by the virtual \a evalInt method and is
+  //! \details This method is used by the evalInt() method and is
   //! separated out such that it also can be reused by sub-classes.
-  static bool evalInt(ElmNorm& pnorm, const SymmTensor& S,
-                      double U, double detF, double detJxW);
+  static bool evalNorm(ElmNorm& pnorm, const SymmTensor& S,
+                       double U, double detF, double detJxW);
 
 private:
   // Data for path-integral of the external energy due to boundary tractions

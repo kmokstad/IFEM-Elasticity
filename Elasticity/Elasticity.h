@@ -268,9 +268,10 @@ protected:
   //! \param[in] r Radial coordinate of current point
   //! \param[out] B The strain-displacement matrix
   //! \param[out] eps Strain tensor at current point
-  virtual bool kinematics(const Vector& eV,
-			  const Vector& N, const Matrix& dNdX, double r,
-			  Matrix& B, Tensor&, SymmTensor& eps) const;
+  virtual bool kinematics(const Vector& eV, size_t,
+                          const Vector& N, const Matrix& dNdX, double r,
+                          Tensor&, Matrix* B = nullptr,
+                          SymmTensor* eps = nullptr) const;
 
   //! \brief Calculates integration point geometric stiffness contributions.
   //! \param EM Element matrix to receive the stiffness contributions
@@ -280,7 +281,7 @@ protected:
   //! \param[in] sigma Stress tensor at current point
   //! \param[in] detJW Jacobian determinant times integration point weight
   void formKG(Matrix& EM, const Vector& N, const Matrix& dNdX,
-	      double r, const Tensor& sigma, double detJW) const;
+              double r, const Tensor& sigma, double detJW) const;
 
   //! \brief Calculates integration point mass matrix contributions.
   //! \param EM Element matrix to receive the mass contributions
@@ -288,7 +289,7 @@ protected:
   //! \param[in] X Cartesian coordinates of current point
   //! \param[in] detJW Jacobian determinant times integration point weight
   void formMassMatrix(Matrix& EM, const Vector& N,
-		      const Vec3& X, double detJW) const;
+                      const Vec3& X, double detJW) const;
 
   //! \brief Calculates integration point body force vector contributions.
   //! \param ES Element vector to receive the body force contributions
@@ -310,7 +311,7 @@ protected:
   //! \param[in] dNdX Basis function gradients at current point
   //! \param[in] r Radial coordinate of current point
   bool formBmatrix(Matrix& Bmat, const Vector& N, const Matrix& dNdX,
-		   double r) const;
+                   double r) const;
 
   //! \brief Calculates the deformation gradient at current point.
   //! \param[in] eV Element solution vector

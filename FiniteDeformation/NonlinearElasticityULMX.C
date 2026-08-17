@@ -742,7 +742,7 @@ bool ElasticityNormULMX::finalizeElement (LocalIntegral& elmInt,
       return false;
 
     // Integrate the norms
-    if (!ElasticityNormUL::evalInt(mx.ref(),Sig,U,Theta[iP],pt.detJW))
+    if (!evalNorm(mx.ref(),Sig,U,Theta[iP],pt.detJW))
       return false;
   }
 

@@ -277,10 +277,10 @@ bool NonlinearElasticityULMixed::evalIntMx (LocalIntegral& elmInt,
 #endif
 
   // Evaluate the deformation gradient, F, and the Green-Lagrange strains, E
-  Matrix B;
   Tensor F(nDF);
   SymmTensor E(nsd,axiSymmetry);
-  if (!this->kinematics(elmInt.vec[U],fe.basis(1),fe.grad(1),X.x,B,F,E))
+  if (!this->kinematics(elmInt.vec[U],
+                        fe.iGP,fe.basis(1),fe.grad(1),X.x,F,nullptr,&E))
     return false;
 
   bool lHaveStrains = !E.isZero(1.0e-16);
@@ -441,6 +441,7 @@ bool NonlinearElasticityULMixed::evalIntMx (LocalIntegral& elmInt,
   if (lHaveStrains)
   {
     // Compute the small-deformation strain-displacement matrix B from dNdx
+    Matrix B;
     if (axiSymmetry)
       this->formBmatrix(B,fe.basis(1),dNdx,r);
     else
@@ -530,10 +531,10 @@ bool ElasticityNormULMixed::evalIntMx (LocalIntegral& elmInt,
   ulp = static_cast<NonlinearElasticityULMixed*>(&myProblem);
 
   // Evaluate the deformation gradient, F, and the Green-Lagrange strains, E
-  Matrix B;
   Tensor F(ulp->nDF);
   SymmTensor E(ulp->nDF);
-  if (!ulp->kinematics(elmInt.vec[U],fe.basis(1),fe.grad(1),X.x,B,F,E))
+  if (!ulp->kinematics(elmInt.vec[U],
+                       fe.iGP,fe.basis(1),fe.grad(1),X.x,F,nullptr,&E))
     return false;
 
   // Evaluate the volumetric change field
@@ -558,7 +559,7 @@ bool ElasticityNormULMixed::evalIntMx (LocalIntegral& elmInt,
 
 
   // Integrate the norms
-  return evalInt(static_cast<ElmNorm&>(elmInt),Sig,Ue,Theta,fe.detJxW);
+  return evalNorm(static_cast<ElmNorm&>(elmInt),Sig,Ue,Theta,fe.detJxW);
 }
 
 

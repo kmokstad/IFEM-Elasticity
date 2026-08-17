@@ -97,16 +97,16 @@ bool NonlinearElasticityUL::evalInt (LocalIntegral& elmInt,
   ElmMats& elMat = static_cast<ElmMats&>(elmInt);
 
   // Evaluate the deformation gradient, F, and the Green-Lagrange strains, E
-  Matrix Bmat, dNdx;
   Tensor F(nDF);
   SymmTensor E(nsd,axiSymmetry);
-  if (!this->kinematics(elMat.vec.front(),fe.N,fe.dNdX,X.x,Bmat,F,E))
+  if (!this->kinematics(elMat.vec.front(),fe.iGP,fe.N,fe.dNdX,X.x,F,nullptr,&E))
     return false;
 
   double detJW = fe.detJxW;
   double J = 1.0;
   double r = axiSymmetry ? X.x : 0.0;
 
+  Matrix dNdx, Bmat;
   bool lHaveStrains = !E.isZero(1.0e-16);
   if (lHaveStrains)
   {
@@ -286,35 +286,39 @@ bool NonlinearElasticityUL::evalBou (LocalIntegral& elmInt,
 }
 
 
-bool NonlinearElasticityUL::kinematics (const Vector& eV,
-					const Vector& N, const Matrix& dNdX,
-					double r, Matrix&, Tensor& F,
-					SymmTensor& E) const
+bool NonlinearElasticityUL::kinematics (const Vector& eV, size_t,
+                                        const Vector& N, const Matrix& dNdX,
+                                        double r, Tensor& F, Matrix*,
+                                        SymmTensor* E) const
 {
   // Compute the deformation gradient, [F] = [I] + [dudX] = [I] + [dNdX]*[u],
   if (eV.empty())
   {
     // Initial state, unit deformation gradient and zero strains
     F = 1.0;
-    E.zero();
+    if (E)
+      E->zero();
     return true;
   }
   else if (!this->formDefGradient(eV,N,dNdX,r,F,true))
     return false;
 
-  // Form the Green-Lagrange strain tensor, E_ij = 0.5*(F_ij+F_ji+F_ki*F_kj).
-  // Note that for the shear terms (i/=j) we actually compute 2*E_ij
-  // to be consistent with the engineering strain style constitutive matrix.
-  // TODO: How is this for axisymmetric problems?
-  unsigned short int i, j, k;
-  for (i = 1; i <= E.dim(); i++)
-    for (j = 1; j <= i; j++)
-    {
-      double Eij = F(i,j) + F(j,i);
-      for (k = 1; k <= nsd; k++)
-        Eij += F(k,i)*F(k,j);
-      E(i,j) = i == j ? 0.5*Eij : Eij;
-    }
+  if (E)
+  {
+    // Form the Green-Lagrange strain tensor, E_ij = 0.5*(F_ij+F_ji+F_ki*F_kj).
+    // Note that for the shear terms (i/=j) we actually compute 2*E_ij
+    // to be consistent with the engineering strain style constitutive matrix.
+    // TODO: How is this for axisymmetric problems?
+    unsigned short int i, j, k;
+    for (i = 1; i <= E->dim(); i++)
+      for (j = 1; j <= i; j++)
+      {
+        double Eij = F(i,j) + F(j,i);
+        for (k = 1; k <= nsd; k++)
+          Eij += F(k,i)*F(k,j);
+        (*E)(i,j) = i == j ? 0.5*Eij : Eij;
+      }
+  }
 
   // Add the unit tensor to F to form the deformation gradient
   F += 1.0;
@@ -359,10 +363,9 @@ bool ElasticityNormUL::evalInt (LocalIntegral& elmInt,
   NonlinearElasticityUL& ulp = static_cast<NonlinearElasticityUL&>(myProblem);
 
   // Evaluate the deformation gradient, F, and the Green-Lagrange strains, E
-  Matrix B;
   Tensor F(ulp.nDF);
   SymmTensor E(ulp.nDF);
-  if (!ulp.kinematics(elmInt.vec.front(),fe.N,fe.dNdX,X.x,B,F,E))
+  if (!ulp.kinematics(elmInt.vec.front(),fe.iGP,fe.N,fe.dNdX,X.x,F,nullptr,&E))
     return false;
 
   // Compute the strain energy density, U(E) = Int_E (S:Eps) dEps
@@ -374,7 +377,7 @@ bool ElasticityNormUL::evalInt (LocalIntegral& elmInt,
       return false;
 
   // Integrate the norms
-  return evalInt(static_cast<ElmNorm&>(elmInt),sigma,U,F.det(),fe.detJxW);
+  return evalNorm(static_cast<ElmNorm&>(elmInt),sigma,U,F.det(),fe.detJxW);
 }
 
 
@@ -384,8 +387,8 @@ size_t ElasticityNormUL::getNoFields (int group) const
 }
 
 
-bool ElasticityNormUL::evalInt (ElmNorm& pnorm, const SymmTensor& S,
-				double U, double detF, double detJxW)
+bool ElasticityNormUL::evalNorm (ElmNorm& pnorm, const SymmTensor& S,
+                                 double U, double detF, double detJxW)
 {
   // Integrate the energy norm a(u^h,u^h) = Int_Omega0 U(E) dV0
   pnorm[0] += U*detJxW;

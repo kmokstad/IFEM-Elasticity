@@ -20,10 +20,11 @@
 /*!
   \brief Class representing the integrand of the nonlinear elasticity problem.
   \details This class implements a Total Lagrangian formulation in matrix form.
-  It inherits most of the Elasticity methods, but reimplements the \a kinematics
-  method, for calculating the nonlinear variant of the strain-displacement
-  matrix, \b B, and the associated Green-Lagrange strain tensor, \b E.
-  The \a evalBou method is also reimplemented to account for with-rotated loads.
+  It inherits most of the Elasticity methods, but overrides the
+  Elasticity::kinematics() method, for calculating the nonlinear variant of the
+  strain-displacement matrix, \b B, and the associated Green-Lagrange strain
+  tensor, \b E. The Elasticity::evalBou() method is also overridden
+  to account for with-rotated loads.
 */
 
 class NonlinearElasticityTL : public Elasticity
@@ -80,10 +81,10 @@ protected:
   //!
   //! \details The deformation gradient \b F and the nonlinear
   //! strain-displacement matrix \b B are established.
-  //! The B-matrix is formed only when the variable \a formB is true.
-  virtual bool kinematics(const Vector& eV,
+  //! The B-matrix is formed only when the member \ref formB is \e true.
+  virtual bool kinematics(const Vector& eV, size_t,
                           const Vector& N, const Matrix& dNdX, double r,
-                          Matrix& Bmat, Tensor& F, SymmTensor& E) const;
+                          Tensor& F, Matrix* Bmat, SymmTensor* E) const;
 
 private:
   Integrand::Traits myIntegrandType; //!< Defines additional terms to be used

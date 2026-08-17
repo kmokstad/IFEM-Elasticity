@@ -83,7 +83,7 @@ bool NonlinearElasticityTL::evalInt (LocalIntegral& elmInt,
   Matrix Bmat;
   Tensor F(nDF);
   SymmTensor E(nsd,axiSymmetry), S(nsd,axiSymmetry);
-  if (!this->kinematics(elMat.vec.front(),fe.N,fe.dNdX,X.x,Bmat,F,E))
+  if (!this->kinematics(elMat.vec.front(),fe.iGP,fe.N,fe.dNdX,X.x,F,&Bmat,&E))
     return false;
 
   // Evaluate the constitutive relation
@@ -225,38 +225,44 @@ bool NonlinearElasticityTL::evalBou (LocalIntegral& elmInt,
 }
 
 
-bool NonlinearElasticityTL::kinematics (const Vector& eV,
-					const Vector& N, const Matrix& dNdX,
-					double r, Matrix& Bmat, Tensor& F,
-					SymmTensor& E) const
+bool NonlinearElasticityTL::kinematics (const Vector& eV, size_t,
+                                        const Vector& N, const Matrix& dNdX,
+                                        double r, Tensor& F, Matrix* Bmat,
+                                        SymmTensor* E) const
 {
   // Compute the deformation gradient, [F] = [I] + [dudX] = [I] + [dNdX]*[u],
   if (eV.empty())
   {
     // Initial state, unit deformation gradient and linear B-matrix
     F = 1.0;
-    E.zero();
-    if (axiSymmetry)
-      return this->formBmatrix(Bmat,N,dNdX,r);
+    if (E)
+      E->zero();
+    if (!Bmat)
+      return true;
+    else if (axiSymmetry)
+      return this->formBmatrix(*Bmat,N,dNdX,r);
     else
-      return this->formBmatrix(Bmat,dNdX);
+      return this->formBmatrix(*Bmat,dNdX);
   }
   else if (!this->formDefGradient(eV,N,dNdX,r,F,true))
     return false;
 
-  // Form the Green-Lagrange strain tensor, E_ij = 0.5*(F_ij+F_ji+F_ki*F_kj).
-  // Note that for the shear terms (i/=j) we actually compute 2*E_ij
-  // to be consistent with the engineering strain style constitutive matrix.
-  // TODO: How is this for axisymmetric problems?
   unsigned short int i, j, k;
-  for (i = 1; i <= E.dim(); i++)
-    for (j = 1; j <= i; j++)
-    {
-      double Eij = F(i,j) + F(j,i);
-      for (k = 1; k <= nsd; k++)
-        Eij += F(k,i)*F(k,j);
-      E(i,j) = i == j ? 0.5*Eij : Eij;
-    }
+  if (E)
+  {
+    // Form the Green-Lagrange strain tensor, E_ij = 0.5*(F_ij+F_ji+F_ki*F_kj).
+    // Note that for the shear terms (i/=j) we actually compute 2*E_ij
+    // to be consistent with the engineering strain style constitutive matrix.
+    // TODO: How is this for axisymmetric problems?
+    for (i = 1; i <= E->dim(); i++)
+      for (j = 1; j <= i; j++)
+      {
+        double Eij = F(i,j) + F(j,i);
+        for (k = 1; k <= nsd; k++)
+          Eij += F(k,i)*F(k,j);
+        (*E)(i,j) = i == j ? 0.5*Eij : Eij;
+      }
+  }
 
   // Add the unit tensor to F to form the deformation gradient
   F += 1.0;
@@ -267,29 +273,32 @@ bool NonlinearElasticityTL::kinematics (const Vector& eV,
   std::cout <<"NonlinearElasticityTL::F =\n"<< F;
 #endif
 
-  if (!formB || E.dim() < nsd) return true;
+  if (!formB || !Bmat || (E && E->dim() < nsd))
+    return true;
 
   // Form the nonlinear B-matrix
   const size_t nenod = dNdX.rows();
   const size_t nstrc = axiSymmetry ? 4 : nsd*(nsd+1)/2;
-  Bmat.resize(nstrc*nsd,nenod,true);
+  Bmat->resize(nstrc*nsd,nenod,true);
 
 #define INDEX(i,j) i+nstrc*(j-1)
+
+  Matrix& B = *Bmat;
 
   // Normal strain part
   for (size_t a = 1; a <= nenod; a++)
     for (i = 1; i <= nsd; i++)
       for (j = 1; j <= nsd; j++)
-	Bmat(INDEX(j,i),a) = F(i,j)*dNdX(a,j);
+	B(INDEX(j,i),a) = F(i,j)*dNdX(a,j);
 
   // Shear strain part
   if (nsd == 3)
     for (size_t a = 1; a <= nenod; a++)
       for (i = 1; i <= nsd; i++)
       {
-	Bmat(INDEX(4,i),a) = F(i,1)*dNdX(a,2) + F(i,2)*dNdX(a,1);
-	Bmat(INDEX(5,i),a) = F(i,2)*dNdX(a,3) + F(i,3)*dNdX(a,2);
-	Bmat(INDEX(6,i),a) = F(i,3)*dNdX(a,1) + F(i,1)*dNdX(a,3);
+	B(INDEX(4,i),a) = F(i,1)*dNdX(a,2) + F(i,2)*dNdX(a,1);
+	B(INDEX(5,i),a) = F(i,2)*dNdX(a,3) + F(i,3)*dNdX(a,2);
+	B(INDEX(6,i),a) = F(i,3)*dNdX(a,1) + F(i,1)*dNdX(a,3);
       }
 
   else if (nsd == 2)
@@ -298,16 +307,16 @@ bool NonlinearElasticityTL::kinematics (const Vector& eV,
       if (axiSymmetry)
       {
 	for (i = 1; i <= nsd; i++)
-	  Bmat(INDEX(4,i),a) = F(i,1)*dNdX(a,2) + F(i,2)*dNdX(a,1);
+	  B(INDEX(4,i),a) = F(i,1)*dNdX(a,2) + F(i,2)*dNdX(a,1);
 	// Hoop strain part for axisymmetry (TODO: check this)
-	Bmat(INDEX(3,1),i) = F(3,3) * (r <= epsR ? dNdX(a,1) : N(a)/r);
+	B(INDEX(3,1),i) = F(3,3) * (r <= epsR ? dNdX(a,1) : N(a)/r);
       }
       else
 	for (i = 1; i <= nsd; i++)
-	  Bmat(INDEX(3,i),a) = F(i,1)*dNdX(a,2) + F(i,2)*dNdX(a,1);
+	  B(INDEX(3,i),a) = F(i,1)*dNdX(a,2) + F(i,2)*dNdX(a,1);
   }
 
-  Bmat.resize(nstrc,nsd*nenod);
+  Bmat->resize(nstrc,nsd*nenod);
 #if INT_DEBUG > 0
   std::cout <<"NonlinearElasticityTL::B ="<< Bmat;
 #endif

@@ -195,7 +195,7 @@ bool LinearElasticity::evalInt (LocalIntegral& elmInt, const FiniteElement& fe,
   {
     // Compute the strain-displacement matrix B from N, dNdX and r = X.x,
     // and evaluate the symmetric strain tensor if displacements are available
-    if (!this->kinematics(eV,fe.N,fe.dNdX,X.x,Bmat,eps,eps))
+    if (!this->kinematics(eV,fe.iGP,fe.N,fe.dNdX,X.x,eps,&Bmat,&eps))
       return false;
     else if (!eps.isZero(1.0e-16))
       lHaveStrains = true;
@@ -258,7 +258,7 @@ bool LinearElasticity::evalInt (LocalIntegral& elmInt, const FiniteElement& fe,
     return true;
 
   // Calculate the dual strains and stresses
-  if (!this->kinematics(elMat.vec[1],fe.N,fe.dNdX,X.x,Bmat,eps,eps))
+  if (!this->kinematics(elMat.vec[1],fe.iGP,fe.N,fe.dNdX,X.x,eps,&Bmat,&eps))
     return false;
   else if (eps.isZero(1.0e-16))
     return true; // the extraction function is zero in this element

@@ -210,10 +210,9 @@ bool NonlinearElasticityFbar::reducedInt (LocalIntegral& elmInt,
   VolPtData& ptData = fbar->myVolData[fbar->iP++];
 
   // Evaluate the deformation gradient, F, at current configuration
-  Matrix B;
   Tensor F(nDF);
   SymmTensor E(nsd,axiSymmetry);
-  if (!this->kinematics(eV,fe.N,fe.dNdX,X.x,B,F,E))
+  if (!this->kinematics(eV,fe.iGP,fe.N,fe.dNdX,X.x,F,nullptr,&E))
     return false;
 
   if (E.isZero(1.0e-16))
@@ -474,10 +473,10 @@ bool NonlinearElasticityFbar::evalInt (LocalIntegral& elmInt,
   FbarMats& fbar = static_cast<FbarMats&>(elmInt);
 
   // Evaluate the deformation gradient, F, at current configuration
-  Matrix B, dNdx;
+  Matrix dNdx;
   Tensor F(nDF);
   SymmTensor E(nsd,axiSymmetry);
-  if (!this->kinematics(fbar.vec.front(),fe.N,fe.dNdX,X.x,B,F,E))
+  if (!this->kinematics(fbar.vec.front(),fe.iGP,fe.N,fe.dNdX,X.x,F,nullptr,&E))
     return false;
 
   double J, Jbar = 0.0;
@@ -713,10 +712,10 @@ bool ElasticityNormFbar::evalInt (LocalIntegral& elmInt,
   FbarNorm& fbar = static_cast<FbarNorm&>(elmInt);
 
   // Evaluate the deformation gradient, F, and the Green-Lagrange strains, E
-  Matrix B;
   Tensor F(p.nDF);
   SymmTensor E(p.nDF);
-  if (!p.kinematics(fbar.myNorm->vec.front(),fe.N,fe.dNdX,X.x,B,F,E))
+  if (!p.kinematics(fbar.myNorm->vec.front(),
+                    fe.iGP,fe.N,fe.dNdX,X.x,F,nullptr,&E))
     return false;
 
   double Jbar = 0.0;
@@ -753,7 +752,7 @@ bool ElasticityNormFbar::evalInt (LocalIntegral& elmInt,
     return false;
 
   // Integrate the norms
-  return ElasticityNormUL::evalInt(*fbar.myNorm,sigma,U,F.det(),fe.detJxW);
+  return evalNorm(*fbar.myNorm,sigma,U,F.det(),fe.detJxW);
 }
 
 

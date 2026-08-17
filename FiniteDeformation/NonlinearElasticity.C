@@ -94,10 +94,9 @@ bool NonlinearElasticity::evalInt (LocalIntegral& elmInt,
   ElmMats& elMat = static_cast<ElmMats&>(elmInt);
 
   // Evaluate the kinematic quantities, F and E, at this point
-  Matrix Bmat;
   Tensor F(nsd);
   SymmTensor E(nsd);
-  if (!this->kinematics(elMat.vec.front(),fe.N,fe.dNdX,X.x,Bmat,F,E))
+  if (!this->kinematics(elMat.vec.front(),fe.iGP,fe.N,fe.dNdX,X.x,F,nullptr,&E))
     return false;
 
   // Evaluate current tangent at this point, that is
@@ -224,10 +223,9 @@ bool NonlinearElasticity::formStressTensor (const Vector& eV,
   }
 
   // Evaluate the kinematic quantities, F and E, at this point
-  Matrix B;
   Tensor F(nsd);
   SymmTensor E(nsd);
-  if (!this->kinematics(eV,Vector(),fe.dNdX,X.x,B,F,E))
+  if (!this->kinematics(eV,fe.iGP,{},fe.dNdX,X.x,F,nullptr,&E))
     return false;
 
   // Evaluate the 2nd Piola-Kirchhoff stress tensor, S, at this point
