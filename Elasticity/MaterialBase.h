@@ -52,6 +52,9 @@ public:
   //! \brief Returns \e true if the stiffness-curve is linear.
   virtual bool isLinear() const { return true; }
 
+  //! \brief Checks if the specified number of integration points is valid.
+  virtual bool checkItgBuffer(size_t) const { return true; }
+
   //! \brief Initializes the material with the number of integration points.
   virtual void initIntegration(size_t) {}
   //! \brief Initializes the material model for a new integration loop.

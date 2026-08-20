@@ -231,6 +231,18 @@ bool PlasticMaterial::diverged (size_t iP1) const
 }
 
 
+bool PlasticMaterial::checkItgBuffer (size_t nGp) const
+{
+  if (nGp == itgPoints.size())
+    return true;
+
+  std::cerr <<" *** PlasticMaterial::checkItgBuffer: Can't change the number"
+            <<" of integration points for materials with internal buffers, "
+            << nGp <<" != "<< itgPoints.size() << std::endl;
+  return false;
+}
+
+
 double PlasticMaterial::getInternalVar (int idx, char* label, size_t iP1) const
 {
   ResultPoint* p = nullptr;

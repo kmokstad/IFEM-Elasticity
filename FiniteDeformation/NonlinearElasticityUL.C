@@ -345,13 +345,19 @@ NormBase* NonlinearElasticityUL::getNormIntegrand (AnaSol*) const
 }
 
 
-void ElasticityNormUL::initIntegration (size_t nGp, size_t nBp)
+bool NonlinearElasticityUL::checkItgBuffer (size_t nGp) const
+{
+  return material ? material->checkItgBuffer(nGp) : true;
+}
+
+
+bool ElasticityNormUL::initIntegration (size_t nGp, size_t nBp)
 {
   Ux.resize(nBp,0.0);
   up.resize(nBp);
   tp.resize(nBp);
 
-  this->ElasticityNorm::initIntegration(nGp,nBp);
+  return static_cast<NonlinearElasticityUL&>(myProblem).checkItgBuffer(nGp);
 }
 
 

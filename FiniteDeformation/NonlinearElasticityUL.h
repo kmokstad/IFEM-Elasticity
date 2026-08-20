@@ -108,6 +108,14 @@ public:
   //! checking all points if \a iP is zero
   virtual bool diverged(size_t iP) const;
 
+  //! \brief Checks if the specified number of integration points is valid.
+  //! \param[in] nGp Total number of integration points in the quadrature.
+  //!
+  //! \details This method always returns \e true, unless internal integration
+  //! point buffers are used. The size of the buffers (if any) then need to be
+  //! equal to \a nGp, otherwise \e false is returned.
+  virtual bool checkItgBuffer(size_t nGp) const;
+
 private:
   char loadOp; //!< Load option
 
@@ -133,7 +141,8 @@ public:
   //! \brief Initializes the integrand with the number of integration points.
   //! \param[in] nGp Total number of interior integration points
   //! \param[in] nBp Total number of boundary integration points
-  virtual void initIntegration(size_t nGp, size_t nBp);
+  //! \return \e false if \a nGp does not match the size of internal buffers.
+  virtual bool initIntegration(size_t nGp, size_t nBp);
 
   using ElasticityNorm::evalInt;
   //! \brief Evaluates the integrand at an interior point.

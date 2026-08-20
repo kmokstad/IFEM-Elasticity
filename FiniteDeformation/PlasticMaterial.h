@@ -189,6 +189,14 @@ public:
   //! checking all points if \a iP1 is zero
   virtual bool diverged(size_t iP1) const;
 
+  //! \brief Checks if the specified number of integration points is valid.
+  //! \param[in] nGp Total number of integration points in the quadrature.
+  //!
+  //! \details This method always returns \e true, unless internal integration
+  //! point buffers are used. The size of the buffers (if any) then need to be
+  //! equal to \a nGp, otherwise \e false is returned.
+  virtual bool checkItgBuffer(size_t nGp) const;
+
   //! \brief Returns number of internal result variables of the material model.
   virtual int getNoIntVariables() const { return 7; }
 
