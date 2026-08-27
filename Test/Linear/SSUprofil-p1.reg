@@ -3,6 +3,7 @@ SSUprofil-p1.xinp
 Input file: SSUprofil-p1.xinp
 Equation solver: 2
 Number of Gauss points: 4
+Evaluation time for property functions: 1
 Solution component output zero tolerance: 1e-06
 Parsing input file SSUprofil-p1.xinp
 Parsing <geometry>
@@ -65,6 +66,8 @@ Assembling interior matrix terms for P1
 Assembling interior matrix terms for P2
 Assembling interior matrix terms for P3
 Assembling Neumann matrix terms for boundary 4 on P2
+Done.
+Sum external load : 0 0 -2.112e+08
 Solving the equation system ...
 	Condition number: 3.2725e+06
  >>> Solution summary <<<
