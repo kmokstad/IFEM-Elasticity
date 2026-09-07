@@ -255,10 +255,13 @@ int NonlinearDriver::solveProblem (DataExporter* writer, HDF5Restart* restart,
   if (opt.format >= 0)
   {
     PROFILE("Postprocessing");
-    // Save geometry and (optionally) the initial state to VTF
-    if (!this->saveModel(params.time.t))
+    // Save geometry to VTF
+    int ret = this->saveModel(params.time.t);
+    if (ret < 0)
       return 4;
-    if (save0 && params.multiSteps() && params.time.dt > 0.0)
+    // Save initial state to VTF, if requested for a multi-step simulation,
+    // but only if some geometry was written
+    if (ret > 0 && save0 && params.multiSteps() && params.time.dt > 0.0)
       if (!this->saveStep(-(++iStep),params.time.t))
         return 4;
   }
@@ -289,12 +292,16 @@ int NonlinearDriver::solveProblem (DataExporter* writer, HDF5Restart* restart,
         // The time stamp needs to be slighly less than the current time tn,
         // otherwise they will not show up in GLview.
         PROFILE("Postprocessing");
-        if (this->saveModel(geoBlk,nBlock,tn) &&
-            model.writeGlvS1(solution.front(),++iStep,nBlock,tn) > 0 &&
-            model.writeGlvStep(iStep,tn-0.1*params.time.dt))
-          lastSave = tn;
-        else
-          return 11;
+        if (int ret = this->saveModel(geoBlk,nBlock,tn); ret < 0)
+          return 4;
+        else if (ret > 0)
+        {
+          if (model.writeGlvS1(solution.front(),++iStep,nBlock,tn) > 0 &&
+              model.writeGlvStep(iStep,tn-0.1*params.time.dt))
+            lastSave = tn;
+          else
+            return 11;
+        }
       }
 
     do // Cut-back loop
@@ -377,10 +384,10 @@ int NonlinearDriver::solveProblem (DataExporter* writer, HDF5Restart* restart,
         if (model.hasElementActivator(tn,lastSave))
         {
           // More elements are activated, save updated model
-          if (this->saveModel(geoBlk,nBlock,tn))
+          if (int ret = this->saveModel(geoBlk,nBlock,tn); ret < 0)
+            return 4;
+          else if (ret > 0)
             lastSave = tn;
-          else
-            return 11;
         }
 
         if (!this->saveStep(iStep,tn))
@@ -505,5 +512,5 @@ bool NonlinearDriver::adaptMesh (int& aStep)
   if (opt.format < 0) return true;
 
   PROFILE("Postprocessing");
-  return this->saveModel(geoBlk,nBlock);
+  return this->saveModel(geoBlk,nBlock) > 0;
 }

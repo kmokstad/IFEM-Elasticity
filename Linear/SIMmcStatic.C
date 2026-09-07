@@ -91,7 +91,7 @@ int SIMmcStatic::solveStatic (const char* inpfile,
   {
     startBlk[i] = geoBlk;
     mySims[i]->setVTF(mySims.front()->getVTF());
-    if (!mySims[i]->writeGlvG(geoBlk,0.0,true))
+    if (mySims[i]->writeGlvG(geoBlk,0.0,true) <= 0)
       return 12;
   }
 

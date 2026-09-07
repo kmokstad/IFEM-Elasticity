@@ -105,7 +105,7 @@ public:
     {
       PROFILE("Postprocessing");
       // Save geometry to VTF
-      if (!this->saveModel(params.time.t))
+      if (this->saveModel(params.time.t) < 0)
         return 4;
     }
 

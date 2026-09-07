@@ -91,7 +91,7 @@ public:
   //! \param[in] append If \e true, append new blocks to existing ones, if any
   //!
   //! \details This method is overridden to also write out the contact bodies.
-  bool writeGlvG(int& nBlock, double time, bool append) override;
+  int writeGlvG(int& nBlock, double time, bool append) override;
   //! \brief Writes contact body movements to the VTF-file.
   //! \param nBlock Running result block counter
   //! \param[in] iStep Load/time step identifier

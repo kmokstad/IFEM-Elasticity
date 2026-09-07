@@ -874,15 +874,17 @@ void SIMElasticity<Dim>::printNormGroup (const Vector& gNorm,
 */
 
 template<class Dim>
-bool SIMElasticity<Dim>::writeGlvG (int& nBlock, double time, bool append)
+int SIMElasticity<Dim>::writeGlvG (int& nBlock, double time, bool append)
 {
-  if (!this->Dim::writeGlvG(nBlock,time,append))
-    return false;
-  else if (!plotRgd)
-    return true;
+  int ret = this->Dim::writeGlvG(nBlock,time,append);
+  if (ret <= 0 || !plotRgd)
+    return ret;
 
-  ElementBlock* rgd = this->rigidGeometry(this);
-  return rgd ? this->getVTF()->writeGrid(rgd,"Rigid couplings",++nBlock) : true;
+  if (ElementBlock* rgd = this->rigidGeometry(this); rgd)
+    if (!this->getVTF()->writeGrid(rgd,"Rigid couplings",++nBlock))
+      return -987;
+
+  return ret+1;
 }
 
 
