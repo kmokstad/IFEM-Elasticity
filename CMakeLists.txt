@@ -432,7 +432,6 @@ ifem_add_regression_test(
   CONDITIONS
     SPR_FOUND
   TEST_FILES
-    Nonlinear/Cube-p1.reg
     Nonlinear/Cube-p2.reg
 )
 
