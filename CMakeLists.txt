@@ -430,6 +430,16 @@ ifem_add_regression_test(
   TARGET
     NonLinEl
   CONDITIONS
+    SPR_FOUND
+  TEST_FILES
+    Nonlinear/Cube-p1.reg
+    Nonlinear/Cube-p2.reg
+)
+
+ifem_add_regression_test(
+  TARGET
+    NonLinEl
+  CONDITIONS
     LRSpline_FOUND
   TEST_FILES
     Nonlinear/CanTS2D-p2-adap.reg

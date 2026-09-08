@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!-- Test of element activation feature in 3D.
+     Isotropic linear-elastic cube subjected to gravity load only.
+     Constrained vertically at the bottom surface, in addition to rigid-body
+     translation and rotation in the XY-plane.
+     Nonlinear analysis with 4x4x4 quadratic spline elements.
+     A new element is activated at each time step. !-->
+
+<simulation>
+
+  <geometry dim="3">
+    <raiseorder patch="1" u="1" v="1" w="1"/>
+    <refine patch="1" u="3" v="3" w="3"/>
+    <topologysets>
+      <set name="fixedZ" type="face">
+        <item patch="1">5</item>
+      </set>
+      <set name="fixedXY" type="point">
+        <item patch="1">1</item>
+      </set>
+    </topologysets>
+    <activation patch="1">1*t</activation>
+  </geometry>
+
+  <boundaryconditions>
+    <dirichlet set="fixedXY" comp="12"/>
+    <dirichlet set="fixedZ" comp="3"/>
+    <fixpoint patch="1" code="2" rx="0.125"/>
+  </boundaryconditions>
+
+  <elasticity>
+    <gravity z="-9.81"/>
+    <isotropic E="4.2e5" nu="0.3" rho="7850"/>
+  </elasticity>
+
+  <discretization>
+    <nGauss>3</nGauss>
+  </discretization>
+
+  <timestepping>
+    <step start="0" end="64">1.0</step>
+  </timestepping>
+
+  <linearsolver>
+    <class fixzeros="true">spr</class>
+  </linearsolver>
+
+  <nonlinearsolver>
+    <nLinIt value="1"/>
+    <updateNewNodes/>
+    <noEnergy/>
+  </nonlinearsolver>
+
+</simulation>

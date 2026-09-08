@@ -1,0 +1,503 @@
+Cube.xinp -UL -ztol 0.0001 -outPrec 5
+
+Input file: Cube.xinp
+Equation solver: 2
+Number of Gauss points: 4
+Basis function values are precalculated but not cached
+Norm- and component output precision: 5
+Norm output zero tolerance: 0.0001
+Parsing input file Cube.xinp
+Parsing <discretization>
+Parsing <geometry>
+  Generating linear geometry on unit parameter domain \[0,1]^3
+  Parsing <refine>
+  Parsing <topologysets>
+	Topology sets: fixedXY (1,1,0D)
+	               fixedZ (1,5,2D)
+  Parsing <activation>
+	Activation function for P1: 1\*t
+  Parsing <refine>
+	Refining P1 3 3 3
+  Parsing <topologysets>
+  Parsing <activation>
+Parsing <boundaryconditions>
+  Parsing <dirichlet>
+	Dirichlet code 12: (fixed)
+  Parsing <dirichlet>
+	Dirichlet code 3: (fixed)
+  Parsing <fixpoint>
+	Constraining P1 point at 0.125 0 0 with code 2
+Parsing <elasticity>
+  Parsing <gravity>
+	Gravitation vector: 0 0 -9.81
+  Parsing <isotropic>
+	Material code 0: 420000 0.3 7850
+Parsing <timestepping>
+Parsing <linearsolver>
+Parsing <nonlinearsolver>
+Parsing input file succeeded.
+Equation solver: 1
+Number of Gauss points: 2
+Basis function values are precalculated but not cached
+Problem definition:
+NonlinearElasticityUL: Updated Lagrangian formulation
+Elasticity: 3D, gravity = 0 0 -9.81
+LinIsotropic: E = 420000, nu = 0.3, rho = 7850, alpha = 1.2e-07
+Using C^(p-1) continuous displacement basis
+Resolving Dirichlet boundary conditions
+	Constraining P1 V1 in direction(s) 12
+	Constraining P1 F5 in direction(s) 3
+ >>> SAM model summary <<<
+Number of elements    64
+Number of nodes       125
+Number of dofs        375
+Number of unknowns    347
+  step=1  time=1
+  Primary solution summary: L2-norm            : 0.00063405
+                            Max X-displacement : 0.0016744
+                            Max Y-displacement : 0.0016744
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -1191.8
+  Total reaction forces: Sum(R) = -0.076137 -0.15227 -1192
+  step=2  time=2
+  Primary solution summary: L2-norm            : 0.00084125
+                            Max X-displacement : 0.0033488
+                            Max Y-displacement : 0.0016744
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -2383.6
+  Total reaction forces: Sum(R) = -0.003272 -0.01839 -2383.7
+  step=3  time=3
+  Primary solution summary: L2-norm            : 0.0010784
+                            Max X-displacement : 0.0050232
+                            Max Y-displacement : 0.0016744
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -3575.4
+  Total reaction forces: Sum(R) = 0.00092315 0.0015679 -3575.5
+  step=4  time=4
+  Primary solution summary: L2-norm            : 0.0013518
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0016744
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -4767.2
+  Total reaction forces: Sum(R) = 0.00013419 0.00057504 -4767.3
+  step=5  time=5
+  Primary solution summary: L2-norm            : 0.0014605
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0033488
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -5959
+  Total reaction forces: Sum(R) = 0.00090996 -0.0082192 -5959.1
+  step=6  time=6
+  Primary solution summary: L2-norm            : 0.0015291
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0033488
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -7150.8
+  Total reaction forces: Sum(R) = 0 -0.0017205 -7150.8
+  step=7  time=7
+  Primary solution summary: L2-norm            : 0.0016181
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0033488
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -8342.6
+  Total reaction forces: Sum(R) = 0.00013416 -0.00019261 -8342.6
+  step=8  time=8
+  Primary solution summary: L2-norm            : 0.0017329
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0033488
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -9534.4
+  Total reaction forces: Sum(R) = 0 0 -9534.4
+  step=9  time=9
+  Primary solution summary: L2-norm            : 0.0018596
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0050232
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -10726
+  Total reaction forces: Sum(R) = 0.00029891 0.0018368 -10726
+  step=10  time=10
+  Primary solution summary: L2-norm            : 0.0019334
+                            Max X-displacement : 0.0066975
+                            Max Y-displacement : 0.0050232
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -11918
+  Total reaction forces: Sum(R) = 0 0.0003406 -11918
+  step=11  time=11
+  Primary solution summary: L2-norm            : 0.002023
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0050232
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -13110
+  Total reaction forces: Sum(R) = 0 0.00011179 -13110
+  step=12  time=12
+  Primary solution summary: L2-norm            : 0.0021335
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0050232
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -14302
+  Total reaction forces: Sum(R) = 0 0 -14302
+  step=13  time=13
+  Primary solution summary: L2-norm            : 0.002284
+                            Max X-displacement : 0.0066975
+                            Max Y-displacement : 0.0066976
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -15493
+  Total reaction forces: Sum(R) = 0 0.0002489 -15493
+  step=14  time=14
+  Primary solution summary: L2-norm            : 0.0023667
+                            Max X-displacement : 0.0066975
+                            Max Y-displacement : 0.0066976
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -16685
+  Total reaction forces: Sum(R) = 0 0.00014093 -16685
+  step=15  time=15
+  Primary solution summary: L2-norm            : 0.0024618
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0066976
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -17877
+  Total reaction forces: Sum(R) = 0 0.00012544 -17877
+  step=16  time=16
+  Primary solution summary: L2-norm            : 0.0025738
+                            Max X-displacement : 0.0066976
+                            Max Y-displacement : 0.0066976
+                            Max Z-displacement : 0.0056641
+  Total external load: Sum(Fex) = 0 0 -19069
+  Total reaction forces: Sum(R) = 0 0 -19069
+  step=17  time=17
+  Primary solution summary: L2-norm            : 0.0040953
+                            Max X-displacement : 0.010506
+                            Max Y-displacement : 0.0084319
+                            Max Z-displacement : 0.025359
+  Total external load: Sum(Fex) = 0 0 -20236
+  Total reaction forces: Sum(R) = 0.012287 -0.00083407 -20236
+  step=18  time=18
+  Primary solution summary: L2-norm            : 0.0049654
+                            Max X-displacement : 0.013272
+                            Max Y-displacement : 0.012545
+                            Max Z-displacement : 0.025644
+  Total external load: Sum(Fex) = 0 0 -21402
+  Total reaction forces: Sum(R) = 0.044665 -0.058122 -21402
+  step=19  time=19
+  Primary solution summary: L2-norm            : 0.0056795
+                            Max X-displacement : 0.018739
+                            Max Y-displacement : 0.014862
+                            Max Z-displacement : 0.025732
+  Total external load: Sum(Fex) = 0 0 -22568
+  Total reaction forces: Sum(R) = 0.02732 -0.035249 -22568
+  step=20  time=20
+  Primary solution summary: L2-norm            : 0.0062444
+                            Max X-displacement : 0.019671
+                            Max Y-displacement : 0.015777
+                            Max Z-displacement : 0.025788
+  Total external load: Sum(Fex) = 0 0 -23735
+  Total reaction forces: Sum(R) = 0.0087523 -0.010138 -23734
+  step=21  time=21
+  Primary solution summary: L2-norm            : 0.0064835
+                            Max X-displacement : 0.01814
+                            Max Y-displacement : 0.011805
+                            Max Z-displacement : 0.024747
+  Total external load: Sum(Fex) = 0 0 -24901
+  Total reaction forces: Sum(R) = -0.010812 0.11085 -24901
+  step=22  time=22
+  Primary solution summary: L2-norm            : 0.0068813
+                            Max X-displacement : 0.019393
+                            Max Y-displacement : 0.014782
+                            Max Z-displacement : 0.024629
+  Total external load: Sum(Fex) = 0 0 -26067
+  Total reaction forces: Sum(R) = 0.025427 0.083554 -26067
+  step=23  time=23
+  Primary solution summary: L2-norm            : 0.0072153
+                            Max X-displacement : 0.020645
+                            Max Y-displacement : 0.016687
+                            Max Z-displacement : 0.024885
+  Total external load: Sum(Fex) = 0 0 -27234
+  Total reaction forces: Sum(R) = 0.016245 0.029287 -27233
+  step=24  time=24
+  Primary solution summary: L2-norm            : 0.0074758
+                            Max X-displacement : 0.01957
+                            Max Y-displacement : 0.017915
+                            Max Z-displacement : 0.024552
+  Total external load: Sum(Fex) = 0 0 -28400
+  Total reaction forces: Sum(R) = 0.0039219 -0.0025975 -28399
+  step=25  time=25
+  Primary solution summary: L2-norm            : 0.0077802
+                            Max X-displacement : 0.018841
+                            Max Y-displacement : 0.017048
+                            Max Z-displacement : 0.023929
+  Total external load: Sum(Fex) = 0 0 -29566
+  Total reaction forces: Sum(R) = -0.012391 0.070875 -29566
+  step=26  time=26
+  Primary solution summary: L2-norm            : 0.0080623
+                            Max X-displacement : 0.019019
+                            Max Y-displacement : 0.018215
+                            Max Z-displacement : 0.023879
+  Total external load: Sum(Fex) = 0 0 -30732
+  Total reaction forces: Sum(R) = 0.0021589 0.044267 -30732
+  step=27  time=27
+  Primary solution summary: L2-norm            : 0.0083012
+                            Max X-displacement : 0.01925
+                            Max Y-displacement : 0.01836
+                            Max Z-displacement : 0.024162
+  Total external load: Sum(Fex) = 0 0 -31898
+  Total reaction forces: Sum(R) = 0.0032844 0.019194 -31898
+  step=28  time=28
+  Primary solution summary: L2-norm            : 0.0085333
+                            Max X-displacement : 0.018755
+                            Max Y-displacement : 0.021143
+                            Max Z-displacement : 0.024281
+  Total external load: Sum(Fex) = 0 0 -33064
+  Total reaction forces: Sum(R) = 0.00030101 -0.00052727 -33064
+  step=29  time=29
+  Primary solution summary: L2-norm            : 0.0088198
+                            Max X-displacement : 0.018356
+                            Max Y-displacement : 0.020306
+                            Max Z-displacement : 0.024186
+  Total external load: Sum(Fex) = 0 0 -34230
+  Total reaction forces: Sum(R) = -0.010708 0.023757 -34230
+  step=30  time=30
+  Primary solution summary: L2-norm            : 0.0090403
+                            Max X-displacement : 0.018226
+                            Max Y-displacement : 0.019824
+                            Max Z-displacement : 0.024102
+  Total external load: Sum(Fex) = 0 0 -35396
+  Total reaction forces: Sum(R) = -0.005713 0.011566 -35396
+  step=31  time=31
+  Primary solution summary: L2-norm            : 0.0092572
+                            Max X-displacement : 0.018192
+                            Max Y-displacement : 0.019345
+                            Max Z-displacement : 0.024217
+  Total external load: Sum(Fex) = 0 0 -36562
+  Total reaction forces: Sum(R) = -0.0027704 0.0047971 -36562
+  step=32  time=32
+  Primary solution summary: L2-norm            : 0.0095109
+                            Max X-displacement : 0.017934
+                            Max Y-displacement : 0.019609
+                            Max Z-displacement : 0.024388
+  Total external load: Sum(Fex) = 0 0 -37728
+  Total reaction forces: Sum(R) = -0.0022537 -0.0027161 -37728
+  step=33  time=33
+  Primary solution summary: L2-norm            : 0.010863
+                            Max X-displacement : 0.018942
+                            Max Y-displacement : 0.019595
+                            Max Z-displacement : 0.046504
+  Total external load: Sum(Fex) = 0 0 -38867
+  Total reaction forces: Sum(R) = 0.038376 0.086667 -38867
+  step=34  time=34
+  Primary solution summary: L2-norm            : 0.012137
+                            Max X-displacement : 0.024172
+                            Max Y-displacement : 0.022035
+                            Max Z-displacement : 0.050609
+  Total external load: Sum(Fex) = 0 0 -40004
+  Total reaction forces: Sum(R) = 0.075807 0.052464 -40004
+  step=35  time=35
+  Primary solution summary: L2-norm            : 0.013333
+                            Max X-displacement : 0.029214
+                            Max Y-displacement : 0.024556
+                            Max Z-displacement : 0.051876
+  Total external load: Sum(Fex) = 0 0 -41142
+  Total reaction forces: Sum(R) = 0.09007 -0.043413 -41142
+  step=36  time=36
+  Primary solution summary: L2-norm            : 0.014615
+                            Max X-displacement : 0.030861
+                            Max Y-displacement : 0.026821
+                            Max Z-displacement : 0.05377
+  Total external load: Sum(Fex) = 0 0 -42279
+  Total reaction forces: Sum(R) = -0.013113 0.037297 -42279
+  step=37  time=37
+  Primary solution summary: L2-norm            : 0.01518
+                            Max X-displacement : 0.030144
+                            Max Y-displacement : 0.02482
+                            Max Z-displacement : 0.052936
+  Total external load: Sum(Fex) = 0 0 -43417
+  Total reaction forces: Sum(R) = 0.0016242 -0.033697 -43417
+  step=38  time=38
+  Primary solution summary: L2-norm            : 0.015912
+                            Max X-displacement : 0.031786
+                            Max Y-displacement : 0.026283
+                            Max Z-displacement : 0.054487
+  Total external load: Sum(Fex) = 0 0 -44553
+  Total reaction forces: Sum(R) = 0.10167 0.23554 -44553
+  step=39  time=39
+  Primary solution summary: L2-norm            : 0.016598
+                            Max X-displacement : 0.033358
+                            Max Y-displacement : 0.028646
+                            Max Z-displacement : 0.05517
+  Total external load: Sum(Fex) = 0 0 -45690
+  Total reaction forces: Sum(R) = 0.093594 0.08575 -45689
+  step=40  time=40
+  Primary solution summary: L2-norm            : 0.017325
+                            Max X-displacement : 0.03299
+                            Max Y-displacement : 0.03184
+                            Max Z-displacement : 0.055594
+  Total external load: Sum(Fex) = 0 0 -46827
+  Total reaction forces: Sum(R) = -0.021978 0.02366 -46827
+  step=41  time=41
+  Primary solution summary: L2-norm            : 0.017881
+                            Max X-displacement : 0.032215
+                            Max Y-displacement : 0.030464
+                            Max Z-displacement : 0.054644
+  Total external load: Sum(Fex) = 0 0 -47964
+  Total reaction forces: Sum(R) = 0.013367 -0.074236 -47964
+  step=42  time=42
+  Primary solution summary: L2-norm            : 0.018432
+                            Max X-displacement : 0.032449
+                            Max Y-displacement : 0.030644
+                            Max Z-displacement : 0.054311
+  Total external load: Sum(Fex) = 0 0 -49101
+  Total reaction forces: Sum(R) = 0.025065 0.26788 -49100
+  step=43  time=43
+  Primary solution summary: L2-norm            : 0.018957
+                            Max X-displacement : 0.032666
+                            Max Y-displacement : 0.032084
+                            Max Z-displacement : 0.054046
+  Total external load: Sum(Fex) = 0 0 -50238
+  Total reaction forces: Sum(R) = 0.032494 0.11895 -50237
+  step=44  time=44
+  Primary solution summary: L2-norm            : 0.019543
+                            Max X-displacement : 0.032163
+                            Max Y-displacement : 0.035324
+                            Max Z-displacement : 0.05374
+  Total external load: Sum(Fex) = 0 0 -51374
+  Total reaction forces: Sum(R) = -0.01374 0.0044778 -51374
+  step=45  time=45
+  Primary solution summary: L2-norm            : 0.020125
+                            Max X-displacement : 0.031384
+                            Max Y-displacement : 0.034066
+                            Max Z-displacement : 0.053524
+  Total external load: Sum(Fex) = 0 0 -52512
+  Total reaction forces: Sum(R) = 0.020257 -0.081494 -52512
+  step=46  time=46
+  Primary solution summary: L2-norm            : 0.020681
+                            Max X-displacement : 0.030927
+                            Max Y-displacement : 0.032908
+                            Max Z-displacement : 0.0534
+  Total external load: Sum(Fex) = 0 0 -53648
+  Total reaction forces: Sum(R) = 0.012822 -0.064011 -53648
+  step=47  time=47
+  Primary solution summary: L2-norm            : 0.021239
+                            Max X-displacement : 0.030495
+                            Max Y-displacement : 0.031954
+                            Max Z-displacement : 0.053675
+  Total external load: Sum(Fex) = 0 0 -54784
+  Total reaction forces: Sum(R) = 0.0073689 -0.035616 -54784
+  step=48  time=48
+  Primary solution summary: L2-norm            : 0.021919
+                            Max X-displacement : 0.029809
+                            Max Y-displacement : 0.032193
+                            Max Z-displacement : 0.054451
+  Total external load: Sum(Fex) = 0 0 -55920
+  Total reaction forces: Sum(R) = 0.0039052 -0.0032601 -55920
+  step=49  time=49
+  Primary solution summary: L2-norm            : 0.023643
+                            Max X-displacement : 0.031646
+                            Max Y-displacement : 0.032324
+                            Max Z-displacement : 0.076121
+  Total external load: Sum(Fex) = 0 0 -57028
+  Total reaction forces: Sum(R) = -0.018079 -0.029887 -57028
+  step=50  time=50
+  Primary solution summary: L2-norm            : 0.025179
+                            Max X-displacement : 0.035349
+                            Max Y-displacement : 0.033383
+                            Max Z-displacement : 0.084255
+  Total external load: Sum(Fex) = 0 0 -58134
+  Total reaction forces: Sum(R) = -0.027892 0.023047 -58134
+  step=51  time=51
+  Primary solution summary: L2-norm            : 0.026781
+                            Max X-displacement : 0.039006
+                            Max Y-displacement : 0.035802
+                            Max Z-displacement : 0.087274
+  Total external load: Sum(Fex) = 0 0 -59240
+  Total reaction forces: Sum(R) = 0.016345 -0.04521 -59240
+  step=52  time=52
+  Primary solution summary: L2-norm            : 0.02879
+                            Max X-displacement : 0.041307
+                            Max Y-displacement : 0.039257
+                            Max Z-displacement : 0.091215
+  Total external load: Sum(Fex) = 0 0 -60344
+  Total reaction forces: Sum(R) = 0.029728 -0.087235 -60344
+  step=53  time=53
+  Primary solution summary: L2-norm            : 0.029846
+                            Max X-displacement : 0.041731
+                            Max Y-displacement : 0.038192
+                            Max Z-displacement : 0.0927
+  Total external load: Sum(Fex) = 0 0 -61449
+  Total reaction forces: Sum(R) = -0.016209 0.031511 -61449
+  step=54  time=54
+  Primary solution summary: L2-norm            : 0.030947
+                            Max X-displacement : 0.043266
+                            Max Y-displacement : 0.038825
+                            Max Z-displacement : 0.096002
+  Total external load: Sum(Fex) = 0 0 -62553
+  Total reaction forces: Sum(R) = 0.0014104 -0.0072927 -62552
+  step=55  time=55
+  Primary solution summary: L2-norm            : 0.032058
+                            Max X-displacement : 0.044731
+                            Max Y-displacement : 0.040913
+                            Max Z-displacement : 0.097606
+  Total external load: Sum(Fex) = 0 0 -63656
+  Total reaction forces: Sum(R) = 0.031538 -0.060003 -63656
+  step=56  time=56
+  Primary solution summary: L2-norm            : 0.03337
+                            Max X-displacement : 0.045352
+                            Max Y-displacement : 0.044454
+                            Max Z-displacement : 0.098971
+  Total external load: Sum(Fex) = 0 0 -64760
+  Total reaction forces: Sum(R) = -0.027401 0.05786 -64760
+  step=57  time=57
+  Primary solution summary: L2-norm            : 0.034158
+                            Max X-displacement : 0.045007
+                            Max Y-displacement : 0.043059
+                            Max Z-displacement : 0.098258
+  Total external load: Sum(Fex) = 0 0 -65866
+  Total reaction forces: Sum(R) = 0.027074 -0.057446 -65866
+  step=58  time=58
+  Primary solution summary: L2-norm            : 0.034953
+                            Max X-displacement : 0.045178
+                            Max Y-displacement : 0.04288
+                            Max Z-displacement : 0.098149
+  Total external load: Sum(Fex) = 0 0 -66970
+  Total reaction forces: Sum(R) = -0.019069 0.092878 -66970
+  step=59  time=59
+  Primary solution summary: L2-norm            : 0.035778
+                            Max X-displacement : 0.045325
+                            Max Y-displacement : 0.043968
+                            Max Z-displacement : 0.098061
+  Total external load: Sum(Fex) = 0 0 -68075
+  Total reaction forces: Sum(R) = 0.019774 0.017907 -68075
+  step=60  time=60
+  Primary solution summary: L2-norm            : 0.036795
+                            Max X-displacement : 0.045124
+                            Max Y-displacement : 0.046746
+                            Max Z-displacement : 0.097715
+  Total external load: Sum(Fex) = 0 0 -69180
+  Total reaction forces: Sum(R) = -0.029163 0.040363 -69180
+  step=61  time=61
+  Primary solution summary: L2-norm            : 0.037575
+                            Max X-displacement : 0.044004
+                            Max Y-displacement : 0.044755
+                            Max Z-displacement : 0.095075
+  Total external load: Sum(Fex) = 0 0 -70286
+  Total reaction forces: Sum(R) = 0.046992 -0.13794 -70286
+  step=62  time=62
+  Primary solution summary: L2-norm            : 0.038458
+                            Max X-displacement : 0.04302
+                            Max Y-displacement : 0.043298
+                            Max Z-displacement : 0.09316
+  Total external load: Sum(Fex) = 0 0 -71391
+  Total reaction forces: Sum(R) = 0.033394 -0.11392 -71391
+  step=63  time=63
+  Primary solution summary: L2-norm            : 0.039466
+                            Max X-displacement : 0.04202
+                            Max Y-displacement : 0.042862
+                            Max Z-displacement : 0.092656
+  Total external load: Sum(Fex) = 0 0 -72495
+  Total reaction forces: Sum(R) = 0.020115 -0.067512 -72495
+  step=64  time=64
+  Primary solution summary: L2-norm            : 0.040806
+                            Max X-displacement : 0.040892
+                            Max Y-displacement : 0.043346
+                            Max Z-displacement : 0.093813
+  Total external load: Sum(Fex) = 0 0 -73598
+  Total reaction forces: Sum(R) = -0.0034277 0.0015221 -73598
+  Time integration completed.

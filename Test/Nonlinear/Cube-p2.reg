@@ -1,0 +1,634 @@
+Cube-p2.xinp -UL -ztol 0.0001 -outPrec 5
+
+Input file: Cube-p2.xinp
+Equation solver: 2
+Number of Gauss points: 4
+Basis function values are precalculated but not cached
+Norm- and component output precision: 5
+Norm output zero tolerance: 0.0001
+Parsing input file Cube-p2.xinp
+Parsing <discretization>
+Parsing <geometry>
+  Generating linear geometry on unit parameter domain \[0,1]^3
+  Parsing <raiseorder>
+  Parsing <refine>
+  Parsing <topologysets>
+	Topology sets: fixedXY (1,1,0D)
+	               fixedZ (1,5,2D)
+  Parsing <activation>
+	Activation function for P1: 1\*t
+  Parsing <raiseorder>
+	Raising order of P1 1 1 1
+  Parsing <refine>
+	Refining P1 3 3 3
+  Parsing <topologysets>
+  Parsing <activation>
+Parsing <boundaryconditions>
+  Parsing <dirichlet>
+	Dirichlet code 12: (fixed)
+  Parsing <dirichlet>
+	Dirichlet code 3: (fixed)
+  Parsing <fixpoint>
+	Constraining P1 point at 0.125 0 0 with code 2
+Parsing <elasticity>
+  Parsing <gravity>
+	Gravitation vector: 0 0 -9.81
+  Parsing <isotropic>
+	Material code 0: 420000 0.3 7850
+Parsing <timestepping>
+Parsing <linearsolver>
+Parsing <nonlinearsolver>
+Parsing input file succeeded.
+Equation solver: 1
+Number of Gauss points: 3
+Basis function values are precalculated but not cached
+Problem definition:
+NonlinearElasticityUL: Updated Lagrangian formulation
+Elasticity: 3D, gravity = 0 0 -9.81
+LinIsotropic: E = 420000, nu = 0.3, rho = 7850, alpha = 1.2e-07
+Using C^(p-1) continuous displacement basis
+Resolving Dirichlet boundary conditions
+	Constraining P1 V1 in direction(s) 12
+	Constraining P1 F5 in direction(s) 3
+ >>> SAM model summary <<<
+Number of elements    64
+Number of nodes       216
+Number of dofs        648
+Number of unknowns    609
+  step=1  time=1
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0010871
+                            Max X-displacement : 0.004619
+                            Max Y-displacement : 0.0048374
+                            Max Z-displacement : 0.0071414
+  Total external load: Sum(Fex) = 0 0 -1191.6
+  Total reaction forces: Sum(R) = -0.08762 -0.21888 -1191.8
+  step=2  time=2
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0013802
+                            Max X-displacement : 0.0066088
+                            Max Y-displacement : 0.0057356
+                            Max Z-displacement : 0.0067308
+  Total external load: Sum(Fex) = 0 0 -2383.2
+  Total reaction forces: Sum(R) = -0.0018109 -0.015034 -2383
+  step=3  time=3
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0017192
+                            Max X-displacement : 0.0083773
+                            Max Y-displacement : 0.0063959
+                            Max Z-displacement : 0.0067564
+  Total external load: Sum(Fex) = 0 0 -3574.8
+  Total reaction forces: Sum(R) = -0.0038282 -0.013592 -3574.7
+  step=4  time=4
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0020763
+                            Max X-displacement : 0.0086436
+                            Max Y-displacement : 0.0069865
+                            Max Z-displacement : 0.0067016
+  Total external load: Sum(Fex) = 0 0 -4766.4
+  Total reaction forces: Sum(R) = -0.00042438 -0.002876 -4766.4
+  step=5  time=5
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0022044
+                            Max X-displacement : 0.008402
+                            Max Y-displacement : 0.0073223
+                            Max Z-displacement : 0.0068611
+  Total external load: Sum(Fex) = 0 0 -5958
+  Total reaction forces: Sum(R) = -0.013866 0.005495 -5957.8
+  step=6  time=6
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0022739
+                            Max X-displacement : 0.0084713
+                            Max Y-displacement : 0.0077635
+                            Max Z-displacement : 0.0067653
+  Total external load: Sum(Fex) = 0 0 -7149.6
+  Total reaction forces: Sum(R) = -0.0032096 -0.0020902 -7149.5
+  step=7  time=7
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0023616
+                            Max X-displacement : 0.0084663
+                            Max Y-displacement : 0.0081811
+                            Max Z-displacement : 0.006792
+  Total external load: Sum(Fex) = 0 0 -8341.2
+  Total reaction forces: Sum(R) = -0.0015079 -0.0032888 -8341.1
+  step=8  time=8
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0024727
+                            Max X-displacement : 0.0084564
+                            Max Y-displacement : 0.0083936
+                            Max Z-displacement : 0.0067221
+  Total external load: Sum(Fex) = 0 0 -9532.8
+  Total reaction forces: Sum(R) = 0 -0.00086015 -9532.7
+  step=9  time=9
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0026648
+                            Max X-displacement : 0.008429
+                            Max Y-displacement : 0.0091169
+                            Max Z-displacement : 0.0068886
+  Total external load: Sum(Fex) = 0 0 -10724
+  Total reaction forces: Sum(R) = -0.004236 -0.010246 -10724
+  step=10  time=10
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.002722
+                            Max X-displacement : 0.0084407
+                            Max Y-displacement : 0.0095496
+                            Max Z-displacement : 0.0067506
+  Total external load: Sum(Fex) = 0 0 -11916
+  Total reaction forces: Sum(R) = -0.0010156 -0.0041845 -11916
+  step=11  time=11
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.002804
+                            Max X-displacement : 0.0084319
+                            Max Y-displacement : 0.0098408
+                            Max Z-displacement : 0.0067083
+  Total external load: Sum(Fex) = 0 0 -13108
+  Total reaction forces: Sum(R) = -0.00025761 -0.0014181 -13108
+  step=12  time=12
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0029202
+                            Max X-displacement : 0.0084185
+                            Max Y-displacement : 0.010054
+                            Max Z-displacement : 0.0067076
+  Total external load: Sum(Fex) = 0 0 -14299
+  Total reaction forces: Sum(R) = 0 -0.00010319 -14299
+  step=13  time=13
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0031287
+                            Max X-displacement : 0.0084111
+                            Max Y-displacement : 0.010012
+                            Max Z-displacement : 0.0069042
+  Total external load: Sum(Fex) = 0 0 -15491
+  Total reaction forces: Sum(R) = -0.00019414 -0.0014837 -15491
+  step=14  time=14
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0032012
+                            Max X-displacement : 0.0083979
+                            Max Y-displacement : 0.010258
+                            Max Z-displacement : 0.006718
+  Total external load: Sum(Fex) = 0 0 -16682
+  Total reaction forces: Sum(R) = 0 -0.00032483 -16682
+  step=15  time=15
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0032929
+                            Max X-displacement : 0.008429
+                            Max Y-displacement : 0.0099145
+                            Max Z-displacement : 0.0066638
+  Total external load: Sum(Fex) = 0 0 -17874
+  Total reaction forces: Sum(R) = 0 0 -17874
+  step=16  time=16
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0034109
+                            Max X-displacement : 0.0084097
+                            Max Y-displacement : 0.010227
+                            Max Z-displacement : 0.0066622
+  Total external load: Sum(Fex) = 0 0 -19066
+  Total reaction forces: Sum(R) = 0 0 -19066
+  step=17  time=17
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0055892
+                            Max X-displacement : 0.021853
+                            Max Y-displacement : 0.020671
+                            Max Z-displacement : 0.02828
+  Total external load: Sum(Fex) = 0 0 -20232
+  Total reaction forces: Sum(R) = 0.038671 0.07702 -20232
+  step=18  time=18
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0068783
+                            Max X-displacement : 0.016323
+                            Max Y-displacement : 0.019499
+                            Max Z-displacement : 0.028093
+  Total external load: Sum(Fex) = 0 0 -21398
+  Total reaction forces: Sum(R) = -0.0015263 0.073284 -21398
+  step=19  time=19
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0080716
+                            Max X-displacement : 0.020602
+                            Max Y-displacement : 0.024578
+                            Max Z-displacement : 0.028041
+  Total external load: Sum(Fex) = 0 0 -22564
+  Total reaction forces: Sum(R) = -0.0063624 0.021883 -22564
+  step=20  time=20
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0086178
+                            Max X-displacement : 0.022088
+                            Max Y-displacement : 0.025538
+                            Max Z-displacement : 0.027382
+  Total external load: Sum(Fex) = 0 0 -23730
+  Total reaction forces: Sum(R) = -0.0072491 0.0070909 -23730
+  step=21  time=21
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0081161
+                            Max X-displacement : 0.020412
+                            Max Y-displacement : 0.020742
+                            Max Z-displacement : 0.02627
+  Total external load: Sum(Fex) = 0 0 -24896
+  Total reaction forces: Sum(R) = 0.016828 -0.024658 -24896
+  step=22  time=22
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0084545
+                            Max X-displacement : 0.02186
+                            Max Y-displacement : 0.021424
+                            Max Z-displacement : 0.025876
+  Total external load: Sum(Fex) = 0 0 -26062
+  Total reaction forces: Sum(R) = 0.003004 -0.0028821 -26062
+  step=23  time=23
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0088306
+                            Max X-displacement : 0.023322
+                            Max Y-displacement : 0.023381
+                            Max Z-displacement : 0.025616
+  Total external load: Sum(Fex) = 0 0 -27228
+  Total reaction forces: Sum(R) = -0.0026697 -0.0066866 -27228
+  step=24  time=24
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0090784
+                            Max X-displacement : 0.022341
+                            Max Y-displacement : 0.024664
+                            Max Z-displacement : 0.025554
+  Total external load: Sum(Fex) = 0 0 -28394
+  Total reaction forces: Sum(R) = -0.001743 -0.0013192 -28393
+  step=25  time=25
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0091389
+                            Max X-displacement : 0.021251
+                            Max Y-displacement : 0.021809
+                            Max Z-displacement : 0.025684
+  Total external load: Sum(Fex) = 0 0 -29560
+  Total reaction forces: Sum(R) = 0.0030505 -0.02914 -29560
+  step=26  time=26
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0093353
+                            Max X-displacement : 0.02142
+                            Max Y-displacement : 0.021295
+                            Max Z-displacement : 0.025494
+  Total external load: Sum(Fex) = 0 0 -30725
+  Total reaction forces: Sum(R) = 0.0002845 -0.010794 -30725
+  step=27  time=27
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0095363
+                            Max X-displacement : 0.021662
+                            Max Y-displacement : 0.022113
+                            Max Z-displacement : 0.025397
+  Total external load: Sum(Fex) = 0 0 -31891
+  Total reaction forces: Sum(R) = -0.00043296 -0.0053158 -31891
+  step=28  time=28
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.0097584
+                            Max X-displacement : 0.020921
+                            Max Y-displacement : 0.024852
+                            Max Z-displacement : 0.025591
+  Total external load: Sum(Fex) = 0 0 -33057
+  Total reaction forces: Sum(R) = 0.00011557 0 -33056
+  step=29  time=29
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.010072
+                            Max X-displacement : 0.020376
+                            Max Y-displacement : 0.023735
+                            Max Z-displacement : 0.025866
+  Total external load: Sum(Fex) = 0 0 -34223
+  Total reaction forces: Sum(R) = 0.0018808 -0.012892 -34223
+  step=30  time=30
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.010229
+                            Max X-displacement : 0.02018
+                            Max Y-displacement : 0.022565
+                            Max Z-displacement : 0.025742
+  Total external load: Sum(Fex) = 0 0 -35388
+  Total reaction forces: Sum(R) = 0.0010681 -0.0050803 -35388
+  step=31  time=31
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.010416
+                            Max X-displacement : 0.020085
+                            Max Y-displacement : 0.022155
+                            Max Z-displacement : 0.025524
+  Total external load: Sum(Fex) = 0 0 -36554
+  Total reaction forces: Sum(R) = 0.0010931 -0.0011714 -36553
+  step=32  time=32
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.010678
+                            Max X-displacement : 0.019929
+                            Max Y-displacement : 0.022371
+                            Max Z-displacement : 0.025443
+  Total external load: Sum(Fex) = 0 0 -37719
+  Total reaction forces: Sum(R) = 0.0013393 0.0024348 -37719
+  step=33  time=33
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.012649
+                            Max X-displacement : 0.023739
+                            Max Y-displacement : 0.022864
+                            Max Z-displacement : 0.050404
+  Total external load: Sum(Fex) = 0 0 -38858
+  Total reaction forces: Sum(R) = 0.019888 0.060806 -38858
+  step=34  time=34
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.013902
+                            Max X-displacement : 0.025862
+                            Max Y-displacement : 0.025393
+                            Max Z-displacement : 0.053816
+  Total external load: Sum(Fex) = 0 0 -39995
+  Total reaction forces: Sum(R) = 0.044001 0.14975 -39994
+  step=35  time=35
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.015162
+                            Max X-displacement : 0.031039
+                            Max Y-displacement : 0.029438
+                            Max Z-displacement : 0.054922
+  Total external load: Sum(Fex) = 0 0 -41132
+  Total reaction forces: Sum(R) = 0.0069765 0.093856 -41131
+  step=36  time=36
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.016632
+                            Max X-displacement : 0.032751
+                            Max Y-displacement : 0.032455
+                            Max Z-displacement : 0.055771
+  Total external load: Sum(Fex) = 0 0 -42269
+  Total reaction forces: Sum(R) = 0.0036805 -0.016165 -42269
+  step=37  time=37
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.016938
+                            Max X-displacement : 0.032113
+                            Max Y-displacement : 0.030845
+                            Max Z-displacement : 0.055041
+  Total external load: Sum(Fex) = 0 0 -43407
+  Total reaction forces: Sum(R) = -0.001708 0.0050828 -43406
+  step=38  time=38
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.017522
+                            Max X-displacement : 0.03384
+                            Max Y-displacement : 0.031784
+                            Max Z-displacement : 0.055202
+  Total external load: Sum(Fex) = 0 0 -44543
+  Total reaction forces: Sum(R) = 0.050614 0.13028 -44541
+  step=39  time=39
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.018134
+                            Max X-displacement : 0.035507
+                            Max Y-displacement : 0.033901
+                            Max Z-displacement : 0.055904
+  Total external load: Sum(Fex) = 0 0 -45679
+  Total reaction forces: Sum(R) = 0.0099113 0.064707 -45677
+  step=40  time=40
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.018855
+                            Max X-displacement : 0.035373
+                            Max Y-displacement : 0.037132
+                            Max Z-displacement : 0.055461
+  Total external load: Sum(Fex) = 0 0 -46815
+  Total reaction forces: Sum(R) = 0 -0.027047 -46815
+  step=41  time=41
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.01926
+                            Max X-displacement : 0.034501
+                            Max Y-displacement : 0.035468
+                            Max Z-displacement : 0.055411
+  Total external load: Sum(Fex) = 0 0 -47952
+  Total reaction forces: Sum(R) = -0.0030897 0.02871 -47952
+  step=42  time=42
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.019689
+                            Max X-displacement : 0.034764
+                            Max Y-displacement : 0.034908
+                            Max Z-displacement : 0.054809
+  Total external load: Sum(Fex) = 0 0 -49089
+  Total reaction forces: Sum(R) = 0.025459 0.01331 -49087
+  step=43  time=43
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.020151
+                            Max X-displacement : 0.035005
+                            Max Y-displacement : 0.035944
+                            Max Z-displacement : 0.054587
+  Total external load: Sum(Fex) = 0 0 -50225
+  Total reaction forces: Sum(R) = 0.0077155 0.014364 -50223
+  step=44  time=44
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.02072
+                            Max X-displacement : 0.034502
+                            Max Y-displacement : 0.038933
+                            Max Z-displacement : 0.054254
+  Total external load: Sum(Fex) = 0 0 -51361
+  Total reaction forces: Sum(R) = -0.004481 -0.027322 -51361
+  step=45  time=45
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.021311
+                            Max X-displacement : 0.033565
+                            Max Y-displacement : 0.037129
+                            Max Z-displacement : 0.054772
+  Total external load: Sum(Fex) = 0 0 -52498
+  Total reaction forces: Sum(R) = -0.01107 0.028016 -52498
+  step=46  time=46
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.021793
+                            Max X-displacement : 0.032982
+                            Max Y-displacement : 0.035348
+                            Max Z-displacement : 0.054737
+  Total external load: Sum(Fex) = 0 0 -53635
+  Total reaction forces: Sum(R) = -0.012732 0.0035456 -53634
+  step=47  time=47
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.022312
+                            Max X-displacement : 0.03243
+                            Max Y-displacement : 0.03434
+                            Max Z-displacement : 0.054914
+  Total external load: Sum(Fex) = 0 0 -54770
+  Total reaction forces: Sum(R) = -0.013283 -0.013105 -54770
+  step=48  time=48
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.023017
+                            Max X-displacement : 0.031973
+                            Max Y-displacement : 0.034339
+                            Max Z-displacement : 0.054771
+  Total external load: Sum(Fex) = 0 0 -55906
+  Total reaction forces: Sum(R) = -0.016047 -0.038221 -55906
+  step=49  time=49
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.02513
+                            Max X-displacement : 0.033481
+                            Max Y-displacement : 0.034506
+                            Max Z-displacement : 0.079397
+  Total external load: Sum(Fex) = 0 0 -57014
+  Total reaction forces: Sum(R) = -0.0018053 -0.0024069 -57014
+  step=50  time=50
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.026649
+                            Max X-displacement : 0.037101
+                            Max Y-displacement : 0.035492
+                            Max Z-displacement : 0.086379
+  Total external load: Sum(Fex) = 0 0 -58119
+  Total reaction forces: Sum(R) = 0.025638 0.031488 -58119
+  step=51  time=51
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.028226
+                            Max X-displacement : 0.040656
+                            Max Y-displacement : 0.038477
+                            Max Z-displacement : 0.089784
+  Total external load: Sum(Fex) = 0 0 -59224
+  Total reaction forces: Sum(R) = -0.0058642 0.022566 -59224
+  step=52  time=52
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.030441
+                            Max X-displacement : 0.043087
+                            Max Y-displacement : 0.042888
+                            Max Z-displacement : 0.09358
+  Total external load: Sum(Fex) = 0 0 -60328
+  Total reaction forces: Sum(R) = -0.014826 0.04071 -60328
+  step=53  time=53
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.031348
+                            Max X-displacement : 0.043587
+                            Max Y-displacement : 0.04216
+                            Max Z-displacement : 0.094624
+  Total external load: Sum(Fex) = 0 0 -61433
+  Total reaction forces: Sum(R) = 0.010088 -0.010803 -61433
+  step=54  time=54
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.032294
+                            Max X-displacement : 0.045153
+                            Max Y-displacement : 0.042789
+                            Max Z-displacement : 0.097254
+  Total external load: Sum(Fex) = 0 0 -62536
+  Total reaction forces: Sum(R) = 0.014583 0.036545 -62535
+  step=55  time=55
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.033288
+                            Max X-displacement : 0.046662
+                            Max Y-displacement : 0.045004
+                            Max Z-displacement : 0.099201
+  Total external load: Sum(Fex) = 0 0 -63639
+  Total reaction forces: Sum(R) = 0.017065 -0.064404 -63638
+  step=56  time=56
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.034581
+                            Max X-displacement : 0.047453
+                            Max Y-displacement : 0.048838
+                            Max Z-displacement : 0.099634
+  Total external load: Sum(Fex) = 0 0 -64743
+  Total reaction forces: Sum(R) = 0.010256 -0.035051 -64743
+  step=57  time=57
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.035205
+                            Max X-displacement : 0.047122
+                            Max Y-displacement : 0.047428
+                            Max Z-displacement : 0.0991
+  Total external load: Sum(Fex) = 0 0 -65848
+  Total reaction forces: Sum(R) = -0.012736 0.035923 -65848
+  step=58  time=58
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.035839
+                            Max X-displacement : 0.047281
+                            Max Y-displacement : 0.047024
+                            Max Z-displacement : 0.099097
+  Total external load: Sum(Fex) = 0 0 -66952
+  Total reaction forces: Sum(R) = 0.019945 -0.023523 -66952
+  step=59  time=59
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.036537
+                            Max X-displacement : 0.047438
+                            Max Y-displacement : 0.047908
+                            Max Z-displacement : 0.09877
+  Total external load: Sum(Fex) = 0 0 -68056
+  Total reaction forces: Sum(R) = 0.0068247 0.02326 -68056
+  step=60  time=60
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.037505
+                            Max X-displacement : 0.047296
+                            Max Y-displacement : 0.050533
+                            Max Z-displacement : 0.09758
+  Total external load: Sum(Fex) = 0 0 -69161
+  Total reaction forces: Sum(R) = 0.0051195 -0.043614 -69161
+  step=61  time=61
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.038265
+                            Max X-displacement : 0.04605
+                            Max Y-displacement : 0.048021
+                            Max Z-displacement : 0.095591
+  Total external load: Sum(Fex) = 0 0 -70268
+  Total reaction forces: Sum(R) = 0.014086 -0.03501 -70268
+  step=62  time=62
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.039053
+                            Max X-displacement : 0.044936
+                            Max Y-displacement : 0.04596
+                            Max Z-displacement : 0.094493
+  Total external load: Sum(Fex) = 0 0 -71372
+  Total reaction forces: Sum(R) = -0.026384 0.033144 -71372
+  step=63  time=63
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.039992
+                            Max X-displacement : 0.043804
+                            Max Y-displacement : 0.045174
+                            Max Z-displacement : 0.094564
+  Total external load: Sum(Fex) = 0 0 -72475
+  Total reaction forces: Sum(R) = 0.010328 -0.0022426 -72475
+  step=64  time=64
+  Disabling geometric stiffness.
+  Enabling geometric stiffness.
+  Primary solution summary: L2-norm            : 0.041374
+                            Max X-displacement : 0.042907
+                            Max Y-displacement : 0.045208
+                            Max Z-displacement : 0.094028
+  Total external load: Sum(Fex) = 0 0 -73578
+  Total reaction forces: Sum(R) = 0.010672 0.023116 -73578
+  Time integration completed.
